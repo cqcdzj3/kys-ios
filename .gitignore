@@ -1,0 +1,9 @@
+﻿bin/
+obj/
+x64/
+*.user
+*.pdb
+*.obj
+*.iobj
+*.ipdb
+.DS_Store
