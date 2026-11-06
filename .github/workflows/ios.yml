@@ -1,0 +1,78 @@
+name: Build unsigned iOS IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+env:
+  VCPKG_ROOT: ${{ github.workspace }}/vcpkg
+  VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+
+jobs:
+  build:
+    runs-on: macos-14
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+          cmake --version
+
+      - name: Setup vcpkg
+        run: |
+          git clone --depth 1 https://github.com/microsoft/vcpkg.git "$VCPKG_ROOT"
+          "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
+
+      - name: Install dependencies for arm64-ios
+        run: |
+          "$VCPKG_ROOT/vcpkg" install \
+            sdl3 sdl3-ttf "sdl3-image[core,png]" "sdl3-mixer[core]" \
+            sqlite3 yaml-cpp glaze asio picosha2 libiconv \
+            --triplet arm64-ios
+
+      - name: Configure
+        run: |
+          cmake -S src -B build-ios \
+            -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+            -DVCPKG_TARGET_TRIPLET=arm64-ios \
+            -DCMAKE_SYSTEM_NAME=iOS \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build-ios --config Release -j 4 2>&1 | tee build.log
+
+      - name: Package unsigned IPA
+        run: |
+          set -e
+          APP=$(find build-ios -maxdepth 3 -name "kys.app" -type d | head -n 1)
+          echo "APP=$APP"
+          if [ -z "$APP" ]; then echo "kys.app not found"; exit 1; fi
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          # 确保 Info.plist 存在（CMake 未生成时兜底）
+          if [ ! -f Payload/kys.app/Info.plist ]; then cp ios/Info.plist Payload/kys.app/Info.plist; fi
+          # 游戏数据占位目录（后续由本地脚本填充）
+          mkdir -p Payload/kys.app/game
+          zip -qry kys-unsigned.ipa Payload
+          ls -lh kys-unsigned.ipa
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: kys-unsigned-ipa
+          path: kys-unsigned.ipa
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
