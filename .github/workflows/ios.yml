@@ -77,6 +77,21 @@ jobs:
           find build-ios -maxdepth 4 -name "kys*" | head -20 || true
           find build-ios -name "*.app" -maxdepth 4 | head -5 || true
 
+      - name: Compile app icon catalog
+        run: |
+          set -euxo pipefail
+          APP=$(find build-ios -maxdepth 4 -name "kys.app" -type d | head -n 1)
+          rm -rf build-ios/iconout && mkdir -p build-ios/iconout
+          xcrun actool ios/AppIcon.xcassets \
+            --compile build-ios/iconout \
+            --platform iphoneos \
+            --minimum-deployment-target 14.0 \
+            --app-icon AppIcon \
+            --output-partial-info-plist build-ios/icon-partial.plist
+          ls -la build-ios/iconout
+          cp build-ios/iconout/Assets.car "$APP/Assets.car"
+          echo "Assets.car copied to $APP"
+
       - name: Package unsigned IPA
         run: |
           set -euxo pipefail
