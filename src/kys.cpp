@@ -4,6 +4,7 @@
 #include "McpServer.h"
 #if defined(KYS_IOS)
 #include <cstdlib>
+#include <fstream>
 #include <filesystem>
 #include <string>
 #include <system_error>
@@ -65,6 +66,29 @@ int main(int argc, char* argv[])
                 std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing, ec);
         }
         path = dst + "/";
+
+        // one-time migration: older data packs ship use_virtual_stick = 0,
+        // which leaves touch-only users without any way to open the settings
+        std::error_code mec;
+        auto cfg = std::filesystem::path(dst) / "config" / "kysmod.ini";
+        auto flag = std::filesystem::path(dst) / "config" / "kys_stick_migrate";
+        if (std::filesystem::exists(cfg, mec) && !std::filesystem::exists(flag, mec))
+        {
+            std::ifstream in(cfg);
+            std::string text((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+            in.close();
+            const std::string key = "use_virtual_stick = 0";
+            if (text.find(key) != std::string::npos)
+            {
+                text.replace(text.find(key), key.size(), "use_virtual_stick = 1");
+                std::ofstream out(cfg, std::ios::trunc);
+                out << text;
+                out.close();
+            }
+            std::ofstream f(flag);
+            f << "1";
+            f.close();
+        }
     }
 #endif
     if (!path.empty())
