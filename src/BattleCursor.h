@@ -10,6 +10,10 @@ class BattleScene;
 //注意，AI选择目标的行为也在这里面
 class BattleCursor : public RunNode
 {
+
+    // 手柄/虚拟按键的重复速度（避免一按就飞过整张地图）
+    static constexpr double pad_move_delay_ = 150;
+    double last_pad_move_ticks_ = 0;
 public:
     BattleCursor(BattleScene* b);
     ~BattleCursor();

@@ -68,27 +68,37 @@ void BattleCursor::dealEvent(EngineEvent& e)
                 }
             }
         }
-        if (engine->gameControllerGetButton(GAMEPAD_BUTTON_DPAD_UP))
+        const bool pad_move_ready = engine->getTicks() - last_pad_move_ticks_ > pad_move_delay_;
+        bool pad_moved = false;
+        if (pad_move_ready && engine->gameControllerGetButton(GAMEPAD_BUTTON_DPAD_UP))
         {
             int tw = battle_scene_->getTowardsByKey(K_UP);
             Scene::getTowardsPosition(battle_scene_->selectX(), battle_scene_->selectY(), tw, &x, &y);
+            pad_moved = true;
         }
-        if (engine->gameControllerGetButton(GAMEPAD_BUTTON_DPAD_DOWN))
+        if (pad_move_ready && engine->gameControllerGetButton(GAMEPAD_BUTTON_DPAD_DOWN))
         {
             int tw = battle_scene_->getTowardsByKey(K_DOWN);
             Scene::getTowardsPosition(battle_scene_->selectX(), battle_scene_->selectY(), tw, &x, &y);
+            pad_moved = true;
         }
-        if (engine->gameControllerGetButton(GAMEPAD_BUTTON_DPAD_LEFT))
+        if (pad_move_ready && engine->gameControllerGetButton(GAMEPAD_BUTTON_DPAD_LEFT))
         {
             int tw = battle_scene_->getTowardsByKey(K_LEFT);
             Scene::getTowardsPosition(battle_scene_->selectX(), battle_scene_->selectY(), tw, &x, &y);
+            pad_moved = true;
         }
-        if (engine->gameControllerGetButton(GAMEPAD_BUTTON_DPAD_RIGHT))
+        if (pad_move_ready && engine->gameControllerGetButton(GAMEPAD_BUTTON_DPAD_RIGHT))
         {
             int tw = battle_scene_->getTowardsByKey(K_RIGHT);
             Scene::getTowardsPosition(battle_scene_->selectX(), battle_scene_->selectY(), tw, &x, &y);
+            pad_moved = true;
         }
         setCursor(x, y);
+        if (pad_moved)
+        {
+            last_pad_move_ticks_ = engine->getTicks();
+        }
     }
 }
 

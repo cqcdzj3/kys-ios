@@ -74,8 +74,14 @@ void VirtualStick::updateLayout()
     r = static_cast<int>(h_ * 0.15);
     button_a_->setPosition(x, y + r);
     button_b_->setPosition(x + r, y);
+#if defined(KYS_IOS)
+    // 本作只用到 A/B（确认/取消），X/Y 在手机上容易误触，移到屏幕外
+    button_x_->setPosition(-1000, -1000);
+    button_y_->setPosition(-1000, -1000);
+#else
     button_x_->setPosition(x - r, y);
     button_y_->setPosition(x, y - r);
+#endif
 
     button_left_axis_->setPosition(static_cast<int>(w_ * 0.04), static_cast<int>(h_ * 0.5));
     button_right_axis_->setPosition(static_cast<int>(w_ * 0.82), static_cast<int>(h_ * 0.08));
