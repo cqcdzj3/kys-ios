@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.20)
+﻿cmake_minimum_required(VERSION 3.20)
 project(kys CXX)
 
 # ---------------------------------------------------------------
-# 目标平台判定：iOS / 桌面
+# 鐩爣骞冲彴鍒ゅ畾锛歩OS / 妗岄潰
 # ---------------------------------------------------------------
 if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
   set(KYS_IOS ON)
@@ -16,7 +16,7 @@ set(CMAKE_OBJCXX_STANDARD 17)
 
 if(KYS_IOS)
   set(CMAKE_OSX_ARCHITECTURES arm64 CACHE STRING "" FORCE)
-  set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0" CACHE STRING "" FORCE)
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "16.4" CACHE STRING "" FORCE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -DNDEBUG -fvisibility=hidden")
   add_definitions(-DKYS_IOS=1)
 elseif(APPLE)
@@ -28,8 +28,7 @@ else()
 endif()
 
 # ---------------------------------------------------------------
-# 依赖：优先使用 vcpkg 安装目录（CI 用 arm64-ios triplet）
-# ---------------------------------------------------------------
+# 渚濊禆锛氫紭鍏堜娇鐢?vcpkg 瀹夎鐩綍锛圕I 鐢?arm64-ios triplet锛?# ---------------------------------------------------------------
 if(DEFINED ENV{VCPKG_ROOT} AND EXISTS "$ENV{VCPKG_ROOT}/installed/${VCPKG_TARGET_TRIPLET}")
   set(VCPKG_INC "$ENV{VCPKG_ROOT}/installed/${VCPKG_TARGET_TRIPLET}/include")
   set(VCPKG_LIB "$ENV{VCPKG_ROOT}/installed/${VCPKG_TARGET_TRIPLET}/lib")
@@ -48,7 +47,7 @@ set(PROJECT_INCLUDE_DIRS
 
 include_directories(${PROJECT_INCLUDE_DIRS})
 
-# 源码（iOS 不编译网络模块，BattleNetwork 已被 WITH_NETWORK 宏隔离）
+# 婧愮爜锛坕OS 涓嶇紪璇戠綉缁滄ā鍧楋紝BattleNetwork 宸茶 WITH_NETWORK 瀹忛殧绂伙級
 file(GLOB SRC_LIST
     ./*.cpp
     ../cifa/Cifa.cpp
@@ -61,8 +60,7 @@ file(GLOB SRC_LIST
     ../others/Hanz2Piny.cpp
 )
 
-# 静态库（vcpkg arm64-ios 提供 <name>.a / lib<name>.a）
-set(LINK_LIBS "")
+# 闈欐€佸簱锛坴cpkg arm64-ios 鎻愪緵 <name>.a / lib<name>.a锛?set(LINK_LIBS "")
 foreach(lib sdl3 SDL3 SDL3_ttf SDL3_image SDL3_mixer sqlite3 yaml-cpp iconv)
   find_library(${lib}_LIB
       NAMES ${lib} lib${lib}
@@ -74,7 +72,7 @@ foreach(lib sdl3 SDL3 SDL3_ttf SDL3_image SDL3_mixer sqlite3 yaml-cpp iconv)
 endforeach()
 
 if(KYS_IOS)
-  # iOS 系统框架（SDL3 静态库会用到这些）
+  # iOS 绯荤粺妗嗘灦锛圫DL3 闈欐€佸簱浼氱敤鍒拌繖浜涳級
   list(APPEND LINK_LIBS
       "-framework UIKit"
       "-framework Foundation"
@@ -114,3 +112,4 @@ else()
 endif()
 
 target_link_libraries(kys ${LINK_LIBS})
+

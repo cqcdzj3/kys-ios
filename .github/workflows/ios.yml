@@ -49,7 +49,7 @@ jobs:
             -DVCPKG_TARGET_TRIPLET=arm64-ios \
             -DCMAKE_SYSTEM_NAME=iOS \
             -DCMAKE_OSX_ARCHITECTURES=arm64 \
-            -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=16.4 \
             -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
@@ -105,3 +105,4 @@ jobs:
           gh release view ci-latest >/dev/null 2>&1 || gh release create ci-latest --title "CI latest" --notes "auto-published build log" || true
           if [ -f build.log ]; then gh release upload ci-latest build.log --clobber || true; fi
           if [ -f kys-unsigned.ipa ]; then gh release upload ci-latest kys-unsigned.ipa --clobber || true; fi
+
