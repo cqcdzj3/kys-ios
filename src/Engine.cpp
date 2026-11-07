@@ -1,4 +1,5 @@
 ﻿#include "Engine.h"
+#include <fstream>
 
 #include "GameUtil.h"
 #include "fmt_compat.h"
@@ -1121,6 +1122,13 @@ int Engine::openAudio(int& freq, int& channels, int& size, int minsize, AudioCal
     audio_format_ = audio_spec_.format;
 
     fmt::print("device {}/{}\n", audio_spec_.freq, audio_spec_.channels);
+#if defined(KYS_IOS)
+    {
+        std::ofstream dev_log(GameUtil::PATH() + "audio_debug.log", std::ios::app);
+        dev_log << "audio_device=" << (audio_device_ != 0) << " freq=" << audio_spec_.freq
+                << " ch=" << audio_spec_.channels << " err=" << SDL_GetError() << "\n";
+    }
+#endif
     if (audio_device_)
     {
         SDL_ResumeAudioDevice(audio_device_);

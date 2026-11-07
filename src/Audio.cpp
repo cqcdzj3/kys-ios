@@ -56,7 +56,7 @@ void Audio::init()
     //SDL_setenv_unsafe("TIMIDITY_CFG", timi_path.c_str(), true);
 #if defined(KYS_IOS)
     std::ofstream audio_log(GameUtil::PATH() + "audio_debug.log", std::ios::trunc);
-    audio_log << "PATH=" << GameUtil::PATH() << "\n";
+    audio_log << "BUILD=36 PATH=" << GameUtil::PATH() << "\n";
 #endif
     for (int i = 0; i < 100; i++)
     {
