@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "SDL3/SDL.h"
+#include "KysPrint.h"
 #include "SDL3_ttf/SDL_ttf.h"
 
 #include <algorithm>
@@ -533,7 +534,7 @@ public:
     {
         if (getTicks() != time_)
         {
-            std::print("{}\n", static_cast<long long>(getTicks() - time_));
+            kys::print("{}\n", static_cast<long long>(getTicks() - time_));
         }
     }
 
@@ -697,4 +698,5 @@ private:
     char buf_[BUFSIZ] = { 0 };
     FILE* f_;
 };
+
 

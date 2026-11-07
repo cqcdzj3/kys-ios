@@ -1,5 +1,7 @@
-﻿#pragma once
-// iOS 14 鍏煎锛歭ibc++ 鐨勬诞鐐?std::format/std::print 渚濊禆 to_chars锛?// 鍚庤€呭湪 iOS < 16.3 涓嶅彲鐢ㄣ€傝繖閲岀敤 snprintf 瀹炵幇绛変环鐨勬渶灏忓姛鑳姐€?#include <cctype>
+#pragma once
+// iOS 14 compatibility: libc++ float std::format/std::print depends on to_chars,
+// which is unavailable before iOS 16.3. snprintf-based equivalents live here.
+#include <cctype>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -19,7 +21,8 @@ inline std::string shortest(double v)
         return v > 0 ? "inf" : "-inf";
     }
     char buf[64];
-    // 浠庢渶鐭湁鏁堜綅寮€濮嬭瘯锛屼繚璇佽鍥炴潵鏄竴鏍风殑鍊硷紙杩戜技 std::format("{}")锛?    for (int prec = 1; prec <= 17; ++prec)
+    // try increasing precision until the text round-trips exactly
+    for (int prec = 1; prec <= 17; ++prec)
     {
         std::snprintf(buf, sizeof(buf), "%.*g", prec, v);
         if (std::strtod(buf, nullptr) == v)
@@ -31,7 +34,7 @@ inline std::string shortest(double v)
     return buf;
 }
 
-// 澶勭悊 "{:spec}" 閲岀殑 spec锛屼緥濡?"", ".2f", "10.3f", "e", "%"
+// handle the spec part of "{:spec}" such as "", ".2f", "10.3f", "e", "%"
 inline std::string with_spec(const std::string& spec, double v)
 {
     if (spec.empty())
@@ -49,7 +52,7 @@ inline std::string with_spec(const std::string& spec, double v)
 
     size_t i = 0;
     std::string width;
-    while (i < spec.size() && (std::isdigit((unsigned char)spec[i]) || spec[i] == '-' || spec[i] == '+'))
+    while (i < spec.size() && (std::isdigit(static_cast<unsigned char>(spec[i])) || spec[i] == '-' || spec[i] == '+'))
     {
         width += spec[i++];
     }
@@ -58,12 +61,13 @@ inline std::string with_spec(const std::string& spec, double v)
     {
         ++i;
         prec = ".";
-        while (i < spec.size() && std::isdigit((unsigned char)spec[i]))
+        while (i < spec.size() && std::isdigit(static_cast<unsigned char>(spec[i])))
         {
             prec += spec[i++];
         }
     }
     char type = 'f';
+    bool percent = false;
     while (i < spec.size())
     {
         char c = spec[i++];
@@ -73,7 +77,7 @@ inline std::string with_spec(const std::string& spec, double v)
         }
         else if (c == '%')
         {
-            type = 'f';
+            percent = true;
         }
     }
 
@@ -82,11 +86,10 @@ inline std::string with_spec(const std::string& spec, double v)
     char buf[512];
     std::snprintf(buf, sizeof(buf), fmt.c_str(), v);
     std::string out = buf;
-    if (spec.find('%') != std::string::npos)
+    if (percent)
     {
         out += "%";
     }
     return out;
 }
 }    // namespace cifa_fmt
-
