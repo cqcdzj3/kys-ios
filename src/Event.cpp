@@ -1,41 +1,23 @@
 ﻿#include "Event.h"
 #include <fmt/format.h>
 #include "Audio.h"
-#include <fmt/format.h>
 #include "BattleScene.h"
-#include <fmt/format.h>
 #include "BattleSceneHades.h"
-#include <fmt/format.h>
 #include "BattleSceneSekiro.h"
-#include <fmt/format.h>
 #include "Font.h"
-#include <fmt/format.h>
 #include "GameUtil.h"
-#include <fmt/format.h>
 #include "GrpIdxFile.h"
-#include <fmt/format.h>
 #include "MainScene.h"
-#include <fmt/format.h>
 #include "Menu.h"
-#include <fmt/format.h>
 #include "PotConv.h"
-#include <fmt/format.h>
 #include "Save.h"
-#include <fmt/format.h>
 #include "ScriptCifa.h"
-#include <fmt/format.h>
 #include "SubScene.h"
-#include <fmt/format.h>
 #include "Talk.h"
-#include <fmt/format.h>
 #include "TextureManager.h"
-#include <fmt/format.h>
 #include "UIShop.h"
-#include <fmt/format.h>
 #include "filefunc.h"
-#include <fmt/format.h>
 #include "strfunc.h"
-#include <fmt/format.h>
 
 Event::Event()
 {

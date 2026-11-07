@@ -1,17 +1,11 @@
 ﻿#include "RunNode.h"
 #include <fmt/format.h>
 #include "McpServer.h"
-#include <fmt/format.h>
 #include "Audio.h"
-#include <fmt/format.h>
 #include "Font.h"
-#include <fmt/format.h>
 #include "GameUtil.h"
-#include <fmt/format.h>
 #include "UISystem.h"
-#include <fmt/format.h>
 #include "VirtualStick.h"
-#include <fmt/format.h>
 
 std::vector<std::shared_ptr<RunNode>> RunNode::root_;
 double RunNode::global_prev_present_ticks_ = 0;

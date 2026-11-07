@@ -1,16 +1,12 @@
 ﻿#pragma once
 #include "INIReader.h"
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 #include "runtime_format.h"
-#include <fmt/format.h>    //支持std::format的运行时格式化，c++26前暂时凑合用
+#include <fmt/ranges.h>    //支持std::format的运行时格式化，c++26前暂时凑合用
 #include <cmath>
-#include <fmt/format.h>
 #include <cstdint>
-#include <fmt/format.h>
-#include <print>
-#include <fmt/format.h>
 #include "filefunc.h"
-#include <fmt/format.h>
 
 //此类中是一些游戏中的公式，例如使用物品的效果，伤害公式等
 //通常来说应该全部是静态函数
@@ -119,4 +115,6 @@ void LOG(fmt::format_string<Args...> fmt, Args... args)
     auto str = fmt::format(fmt, std::forward<Args>(args)...);
     fputs(str.c_str(), stdout);
 }
+
+
 

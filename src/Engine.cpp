@@ -1,26 +1,17 @@
 ﻿#include "Engine.h"
 #include <fmt/format.h>
-#include <fmt/format.h>
 
 #include "GameUtil.h"
-#include <fmt/format.h>
 #include "SDL3_image/SDL_image.h"
-#include <fmt/format.h>
 #include "UIRenderer.h"
-#include <fmt/format.h>
 #include "strfunc.h"
-#include <fmt/format.h>
 #ifdef __ANDROID__
 #include "ZipFile2.h"
-#include <fmt/format.h>
 #endif
 #include <cmath>
-#include <fmt/format.h>
 #include <vector>
-#include <fmt/format.h>
 #ifdef _MSC_VER
 #include <windows.h>
-#include <fmt/format.h>
 #pragma comment(lib, "user32.lib")
 #endif
 

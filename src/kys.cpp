@@ -1,7 +1,13 @@
-﻿#include "Application.h"
+#include "Application.h"
 #include "Engine.h"
 #include "GameUtil.h"
 #include "McpServer.h"
+#if defined(KYS_IOS)
+#include <cstdlib>
+#include <filesystem>
+#include <string>
+#include <system_error>
+#endif
 #ifndef _WIN32
 #include <csignal>
 #endif
@@ -42,6 +48,25 @@ int main(int argc, char* argv[])
 #ifdef _WIN32
     if (!mcp) { system("chcp 65001"); }
 #endif
+#if defined(KYS_IOS)
+    if (path.empty())
+    {
+        const char* home = std::getenv("HOME");
+        std::string docs = home ? std::string(home) + "/Documents/" : std::string("./");
+        std::string dst = docs + "game";
+        std::error_code ec;
+        if (!std::filesystem::exists(dst + "/config/kysmod.ini", ec))
+        {
+            // first run: copy the bundled data into the writable Documents folder
+            std::string exe = argv[0] ? argv[0] : "";
+            auto slash = exe.find_last_of('/');
+            std::string base = slash == std::string::npos ? std::string(".") : exe.substr(0, slash);
+            std::filesystem::copy(base + "/game", dst,
+                std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing, ec);
+        }
+        path = dst + "/";
+    }
+#endif
     if (!path.empty())
     {
         if (path.back() != '/' && path.back() != '\\') { path += '/'; }
@@ -51,3 +76,4 @@ int main(int argc, char* argv[])
     Application app;
     return app.run();
 }
+

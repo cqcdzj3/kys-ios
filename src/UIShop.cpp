@@ -1,17 +1,11 @@
 ﻿#include "UIShop.h"
 #include <fmt/format.h>
 #include "Event.h"
-#include <fmt/format.h>
 #include "Font.h"
-#include <fmt/format.h>
 #include "PotConv.h"
-#include <fmt/format.h>
 #include "Save.h"
-#include <fmt/format.h>
 #include "TextureManager.h"
-#include <fmt/format.h>
 #include "strfunc.h"
-#include <fmt/format.h>
 
 UIShop::UIShop()
 {

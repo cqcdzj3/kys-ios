@@ -1,9 +1,7 @@
 ﻿#include "ShowRoleDifference.h"
 #include <fmt/format.h>
 #include "Font.h"
-#include <fmt/format.h>
 #include "Save.h"
-#include <fmt/format.h>
 
 ShowRoleDifference::ShowRoleDifference()
 {

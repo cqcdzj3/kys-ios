@@ -1,24 +1,14 @@
 ﻿#include "Cifa.h"
 #include <fmt/format.h>
-#include <fmt/format.h>
 #include <algorithm>
-#include <fmt/format.h>
 #include <bit>
-#include <fmt/format.h>
 #include <cerrno>
-#include <fmt/format.h>
 #include <cstdlib>
-#include <fmt/format.h>
 #include <fstream>
-#include <fmt/format.h>
 #include <iostream>
-#include <fmt/format.h>
 #include <limits>
-#include <fmt/format.h>
 #include <optional>
-#include <fmt/format.h>
 #include <sstream>
-#include <fmt/format.h>
 
 namespace cifa
 {

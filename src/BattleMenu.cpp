@@ -1,19 +1,12 @@
 ﻿#include "BattleMenu.h"
 #include <fmt/format.h>
 #include "BattleScene.h"
-#include <fmt/format.h>
 #include "Event.h"
-#include <fmt/format.h>
 #include "Font.h"
-#include <fmt/format.h>
 #include "PotConv.h"
-#include <fmt/format.h>
 #include "Random.h"
-#include <fmt/format.h>
 #include "Save.h"
-#include <fmt/format.h>
 #include "strfunc.h"
-#include <fmt/format.h>
 
 BattleActionMenu::BattleActionMenu(BattleScene* b)
 {

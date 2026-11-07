@@ -3,19 +3,12 @@
 #include <fmt/format.h>
 
 #include "BattleScene.h"
-#include <fmt/format.h>
 #include "Camera.h"
-#include <fmt/format.h>
 #include "Font.h"
-#include <fmt/format.h>
 #include "PaperPresentation.h"
-#include <fmt/format.h>
 #include "TextureManager.h"
-#include <fmt/format.h>
 #include "UIKeyConfig.h"
-#include <fmt/format.h>
 #include <cmath>
-#include <fmt/format.h>
 
 //在即时战斗场景中，使用的是物理坐标，在画面上显示时y方向需要除以2
 //x和y方向的最大值都是地面的宽度，即TILE_W * 64 * 2

@@ -1,11 +1,8 @@
 ﻿#include "ShowExp.h"
 #include <fmt/format.h>
 #include "Engine.h"
-#include <fmt/format.h>
 #include "Font.h"
-#include <fmt/format.h>
 #include "TextureManager.h"
-#include <fmt/format.h>
 
 ShowExp::ShowExp()
 {

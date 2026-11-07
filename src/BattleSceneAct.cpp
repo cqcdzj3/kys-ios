@@ -1,11 +1,8 @@
 ﻿#include "BattleSceneAct.h"
 #include <fmt/format.h>
 #include "GameUtil.h"
-#include <fmt/format.h>
 #include "filefunc.h"
-#include <fmt/format.h>
 #include <limits>
-#include <fmt/format.h>
 
 namespace
 {

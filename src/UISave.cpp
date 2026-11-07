@@ -1,17 +1,11 @@
 ﻿#include "UISave.h"
 #include <fmt/format.h>
 #include "Event.h"
-#include <fmt/format.h>
 #include "MainScene.h"
-#include <fmt/format.h>
 #include "Save.h"
-#include <fmt/format.h>
 #include "SubScene.h"
-#include <fmt/format.h>
 #include "UI.h"
-#include <fmt/format.h>
 #include "filefunc.h"
-#include <fmt/format.h>
 
 UISave::UISave()
 {
