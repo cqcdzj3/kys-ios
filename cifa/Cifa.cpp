@@ -1,14 +1,24 @@
 ﻿#include "Cifa.h"
-#include "CifaFormat.h"
+#include <fmt/format.h>
+#include <fmt/format.h>
 #include <algorithm>
+#include <fmt/format.h>
 #include <bit>
+#include <fmt/format.h>
 #include <cerrno>
+#include <fmt/format.h>
 #include <cstdlib>
+#include <fmt/format.h>
 #include <fstream>
+#include <fmt/format.h>
 #include <iostream>
+#include <fmt/format.h>
 #include <limits>
+#include <fmt/format.h>
 #include <optional>
+#include <fmt/format.h>
 #include <sstream>
+#include <fmt/format.h>
 
 namespace cifa
 {
@@ -108,8 +118,8 @@ bool Cifa::parse_number_literal(const std::string& text, Object& value)
 static std::string object_to_display_string(const Object& value)
 {
     if (value.isType<bool>()) { return value.toBool() ? "true" : "false"; }
-    if (value.isInteger()) { return std::format("{}", value.toInt64()); }
-    if (value.isType<double>()) { return cifa_fmt::shortest(value.toDouble()); }
+    if (value.isInteger()) { return fmt::format("{}", value.toInt64()); }
+    if (value.isType<double>()) { return fmt::format("{}", value.toDouble()); }
     if (value.isType<std::string>()) { return value.toString(); }
     return {};
 }
@@ -169,12 +179,12 @@ Cifa::Cifa()
     {
         if (d1.isNumber())
         {
-            std::print("{}", object_to_display_string(d1));
+            fmt::print("{}", object_to_display_string(d1));
             return true;
         }
         if (d1.isType<std::string>())
         {
-            std::print("{}", d1.toString());
+            fmt::print("{}", d1.toString());
             return true;
         }
         //不可输出类型：触发运行时错误，不输出值
@@ -201,7 +211,7 @@ Cifa::Cifa()
                 }
             }
             //只有全部成功才输出换行，避免出错后多出空行
-            if (ok) { std::print("\n"); }
+            if (ok) { fmt::print("\n"); }
             return Object(static_cast<std::int64_t>(d.size()));
         });
     register_function("to_string", [](ObjectVector& d)
@@ -469,31 +479,31 @@ Cifa::Cifa()
             {
                 if (arg.isType<std::int64_t>())
                 {
-                    return std::format("{}", arg.toInt64());
+                    return fmt::format("{}", arg.toInt64());
                 }
                 if (arg.isType<bool>())
                 {
                     return arg.toBool() ? "true" : "false";
                 }
-                return cifa_fmt::shortest(arg.toDouble());
+                return fmt::format("{}", arg.toDouble());
             }
             std::string s = arg.toString();
-            return std::format("{}", s);
+            return fmt::format("{}", s);
         }
         std::string fmt_str = "{:" + fspec + "}";
         char last = fspec.back();
         if (!arg.isNumber() || last == 's')
         {
             std::string sv = arg.toString();
-            return std::vformat(fmt_str, std::make_format_args(sv));
+            return fmt::vformat(fmt_str, fmt::make_format_args(sv));
         }
         if (std::string_view("diouxXbB").find(last) != std::string_view::npos)
         {
             long long iv = arg.toInt64();
-            return std::vformat(fmt_str, std::make_format_args(iv));
+            return fmt::vformat(fmt_str, fmt::make_format_args(iv));
         }
         double dv = arg.toDouble();
-        return cifa_fmt::with_spec(fspec, dv);
+        return fmt::vformat(fmt_str, fmt::make_format_args(dv));
     };
     register_function("format", [format_sub](ObjectVector& x) -> Object
         {
@@ -4573,7 +4583,7 @@ std::string Cifa::get_errors_str() const
 //将编译期错误信息输出到 stderr（委托 get_errors_str() 避免重复逻辑）
 void Cifa::print_errors() const
 {
-    std::print(stderr, "{}", get_errors_str());
+    fmt::print(stderr, "{}", get_errors_str());
 }
 
 //获取所有编译期错误的列表，建议优先使用 get_errors_str() 或 print_errors()
@@ -4778,7 +4788,9 @@ std::string Cifa::get_runtime_error() const
 //输出运行时错误信息和调用栈到 stderr
 void Cifa::print_runtime_error() const
 {
-    std::print(stderr, "{}", format_runtime_error());
+    fmt::print(stderr, "{}", format_runtime_error());
 }
 }    // namespace cifa
+
+
 

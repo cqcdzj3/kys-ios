@@ -1,10 +1,17 @@
 ﻿#include "UIShop.h"
+#include <fmt/format.h>
 #include "Event.h"
+#include <fmt/format.h>
 #include "Font.h"
+#include <fmt/format.h>
 #include "PotConv.h"
+#include <fmt/format.h>
 #include "Save.h"
+#include <fmt/format.h>
 #include "TextureManager.h"
+#include <fmt/format.h>
 #include "strfunc.h"
+#include <fmt/format.h>
 
 UIShop::UIShop()
 {
@@ -75,20 +82,20 @@ void UIShop::draw()
         auto item = Save::getInstance()->getItem(shop_->ItemID[i]);
         int count = Save::getInstance()->getItemCountInBag(item->ID);
         str = std::string(item->Name) + std::string(abs(12 - Font::getTextDrawSize(item->Name)), ' ');
-        str += std::format("{:8}{:8}{:8}{:8}", shop_->Price[i], shop_->Total[i], count, plan_buy_[i]);
-        //str = std::format("{:12}{:8}{:8}{:8}{:8}", item->Name, shop_->Price[i], shop_->Total[i], count, plan_buy_[i]);
+        str += fmt::format("{:8}{:8}{:8}{:8}", shop_->Price[i], shop_->Total[i], count, plan_buy_[i]);
+        //str = fmt::format("{:12}{:8}{:8}{:8}{:8}", item->Name, shop_->Price[i], shop_->Total[i], count, plan_buy_[i]);
         //std::string m = PotConv::utf8tocp936((char*)str1.c_str());
         //std::cout << m << "\n";
         ((Button*)(getChild(i).get()))->setText(str);
     }
 
     int need_money = calNeedMoney();
-    str = std::format("總計銀兩{:8}", need_money);
+    str = fmt::format("總計銀兩{:8}", need_money);
     font->draw(str, 24, x + SHOP_MONEY_X, y + 30 + SHOP_ITEM_COUNT * SHOP_ROW_HEIGHT, SHOP_TEXT_COLOR);
 
     Color c = SHOP_TEXT_COLOR;
     int money = Save::getInstance()->getMoneyCountInBag();
-    str = std::format("持有銀兩{:8}", money);
+    str = fmt::format("持有銀兩{:8}", money);
     if (money < need_money)
     {
         c = SHOP_MONEY_WARNING_COLOR;
@@ -211,3 +218,4 @@ int UIShop::calNeedMoney()
     }
     return need_money;
 }
+

@@ -1,7 +1,11 @@
 ﻿#include "Audio.h"
+#include <fmt/format.h>
 #include "Engine.h"
+#include <fmt/format.h>
 #include "GameUtil.h"
+#include <fmt/format.h>
 #include "filefunc.h"
+#include <fmt/format.h>
 
 Audio::Audio()
 {
@@ -49,26 +53,26 @@ void Audio::init()
     std::string music_path;
     std::string asound_path;
     std::string esound_path;
-    auto timi_path = std::format("{}music/timidity.cfg", GameUtil::PATH());
+    auto timi_path = fmt::format("{}music/timidity.cfg", GameUtil::PATH());
     //SDL_SetEnvironmentVariable(SDL_GetEnvironment(), "TIMIDITY_CFG", timi_path.c_str(), true);
     //SDL_setenv_unsafe("TIMIDITY_CFG", timi_path.c_str(), true);
     for (int i = 0; i < 100; i++)
     {
-        music_path = std::format("{}music/{}.mid", GameUtil::PATH(), i);
+        music_path = fmt::format("{}music/{}.mid", GameUtil::PATH(), i);
         if (filefunc::fileExist(music_path))
         {
             music_.push_back(loadMusic(music_path));
         }
         else
         {
-            music_path = std::format("{}music/{}.mp3", GameUtil::PATH(), i);
+            music_path = fmt::format("{}music/{}.mp3", GameUtil::PATH(), i);
             music_.push_back(loadMusic(music_path));
         }
 
-        asound_path = std::format("{}sound/atk{:02}.wav", GameUtil::PATH(), i);
+        asound_path = fmt::format("{}sound/atk{:02}.wav", GameUtil::PATH(), i);
         asound_.push_back(loadWav(asound_path));
 
-        esound_path = std::format("{}sound/e{:02}.wav", GameUtil::PATH(), i);
+        esound_path = fmt::format("{}sound/e{:02}.wav", GameUtil::PATH(), i);
         esound_.push_back(loadWav(esound_path));
     }
 }
@@ -146,10 +150,10 @@ void Audio::playVoice(int voice_id, int volume)
     stopWav();
     if (voice_.find(voice_id) == voice_.end())
     {
-        auto filename = std::format("{}voice/{}.mp3", GameUtil::PATH(), voice_id);
+        auto filename = fmt::format("{}voice/{}.mp3", GameUtil::PATH(), voice_id);
         if (!filefunc::fileExist(filename))
         {
-            filename = std::format("{}voice/{}.wav", GameUtil::PATH(), voice_id);
+            filename = fmt::format("{}voice/{}.wav", GameUtil::PATH(), voice_id);
         }
         voice_[voice_id] = loadWav(filename);
     }
@@ -239,3 +243,4 @@ void Audio::playWav(WAV w, int volume, int track_num)
         current_track_num_ = 0;
     }
 }
+

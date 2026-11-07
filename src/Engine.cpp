@@ -1,17 +1,26 @@
 ﻿#include "Engine.h"
-#include "KysPrint.h"
+#include <fmt/format.h>
+#include <fmt/format.h>
 
 #include "GameUtil.h"
+#include <fmt/format.h>
 #include "SDL3_image/SDL_image.h"
+#include <fmt/format.h>
 #include "UIRenderer.h"
+#include <fmt/format.h>
 #include "strfunc.h"
+#include <fmt/format.h>
 #ifdef __ANDROID__
 #include "ZipFile2.h"
+#include <fmt/format.h>
 #endif
 #include <cmath>
+#include <fmt/format.h>
 #include <vector>
+#include <fmt/format.h>
 #ifdef _MSC_VER
 #include <windows.h>
+#include <fmt/format.h>
 #pragma comment(lib, "user32.lib")
 #endif
 
@@ -166,7 +175,7 @@ int Engine::init(void* handle /*= nullptr*/, int handle_type /*= 0*/, int maximi
 #endif
 
     renderer_ = SDL_GetRenderer(window_);
-    kys::print("{}\n", SDL_GetError());
+    fmt::print("{}\n", SDL_GetError());
 
     if (renderer_ == nullptr)
     {
@@ -208,7 +217,7 @@ int Engine::init(void* handle /*= nullptr*/, int handle_type /*= 0*/, int maximi
             renderer_ = SDL_CreateRendererWithProperties(props.id());
             if (renderer_)
             {
-                kys::print("Renderer fallback selected: {}\n", candidate);
+                fmt::print("Renderer fallback selected: {}\n", candidate);
                 renderer_self_ = true;
                 break;
             }
@@ -223,14 +232,14 @@ int Engine::init(void* handle /*= nullptr*/, int handle_type /*= 0*/, int maximi
 
     if (renderer_ == nullptr)
     {
-        kys::print("Failed to create renderer: {}\n", SDL_GetError());
+        fmt::print("Failed to create renderer: {}\n", SDL_GetError());
         return -1;
     }
 
-    kys::print("Renderer name: {}\n", SDL_GetRendererName(renderer_));
+    fmt::print("Renderer name: {}\n", SDL_GetRendererName(renderer_));
 
     max_texture_size_ = (int)SDL_GetNumberProperty(SDL_GetRendererProperties(renderer_), SDL_PROP_RENDERER_MAX_TEXTURE_SIZE_NUMBER, 0);
-    kys::print("Max texture size: {}\n", max_texture_size_);
+    fmt::print("Max texture size: {}\n", max_texture_size_);
 
     //SDL_SetDefaultTextureScaleMode(renderer_, SDL_SCALEMODE_PIXELART);
 
@@ -248,7 +257,7 @@ int Engine::init(void* handle /*= nullptr*/, int handle_type /*= 0*/, int maximi
     int num_touch = 0;
     SDL_GetTouchDevices(&num_touch);
 
-    kys::print("Found {} touch(es)\n", num_touch);
+    fmt::print("Found {} touch(es)\n", num_touch);
 
     rect_ = { 0, 0, ui_w_, ui_h_ };
 
@@ -275,7 +284,7 @@ int Engine::init(void* handle /*= nullptr*/, int handle_type /*= 0*/, int maximi
 
     square_ = createRectTexture(100, 100, 0);
 
-    kys::print("maximum width and height are: {}, {}\n", max_x_, max_y_);
+    fmt::print("maximum width and height are: {}, {}\n", max_x_, max_y_);
 
     createMainTexture(SDL_PixelFormat(0), TEXTUREACCESS_TARGET, ui_w_, ui_h_);
     return 0;
@@ -329,7 +338,7 @@ void Engine::setWindowSize(int w, int h)
     ratio = std::min(1.0 * win_w_ / w, 1.0 * win_h_ / h);
     win_w_ = w * ratio;
     win_h_ = h * ratio;
-    //kys::print("{}, {}, {}, {}, {}\n", win_w_, win_h_, w, h, ratio);
+    //fmt::print("{}, {}, {}, {}, {}\n", win_w_, win_h_, w, h, ratio);
     if (!window_)
     {
         return;
@@ -341,7 +350,7 @@ void Engine::setWindowSize(int w, int h)
     SDL_ShowWindow(window_);
     SDL_RaiseWindow(window_);
     SDL_GetWindowSize(window_, &win_w_, &win_h_);
-    //kys::print("{}, {}, {}, {}, {}\n", win_w_, win_h_, w, h, ratio);
+    //fmt::print("{}, {}, {}, {}, {}\n", win_w_, win_h_, w, h, ratio);
     //resetWindowsPosition();
     //renderPresent();
 }
@@ -928,7 +937,7 @@ void Engine::toggleFullscreen()
 
 Texture* Engine::loadImage(const std::string& filename, int as_white)
 {
-    //kys::print("%s", filename.c_str());
+    //fmt::print("%s", filename.c_str());
     //屏蔽libpng的错误输出
     DisableStream d(stderr);
     auto sur = IMG_Load(filename.c_str());
@@ -1087,7 +1096,7 @@ int Engine::openAudio(int& freq, int& channels, int& size, int minsize, AudioCal
     SDL_AudioSpec want;
     SDL_zero(want);
 
-    kys::print("\naudio freq/channels: stream {}/{}, ", freq, channels);
+    fmt::print("\naudio freq/channels: stream {}/{}, ", freq, channels);
     if (channels <= 2)
     {
         channels = 2;
@@ -1120,14 +1129,14 @@ int Engine::openAudio(int& freq, int& channels, int& size, int minsize, AudioCal
     channels = audio_spec_.channels;
     audio_format_ = audio_spec_.format;
 
-    kys::print("device {}/{}\n", audio_spec_.freq, audio_spec_.channels);
+    fmt::print("device {}/{}\n", audio_spec_.freq, audio_spec_.channels);
     if (audio_device_)
     {
         SDL_ResumeAudioDevice(audio_device_);
     }
     else
     {
-        kys::print("failed to open audio: {}\n", SDL_GetError());
+        fmt::print("failed to open audio: {}\n", SDL_GetError());
     }
 
     return 0;
@@ -1312,12 +1321,12 @@ void Engine::checkGameControllers()
     auto joystick_ids = SDL_GetJoysticks(&num_joysticks);
     if (num_joysticks <= 0)
     {
-        kys::print("Warning: No joysticks connected!\n");
+        fmt::print("Warning: No joysticks connected!\n");
     }
     else
     {
         //按照游戏控制器打开
-        kys::print("Found {} game controller(s)\n", num_joysticks);
+        fmt::print("Found {} game controller(s)\n", num_joysticks);
         game_controllers_.resize(num_joysticks);
         nintendo_switch_.resize(game_controllers_.size());
         for (int i = 0; i < game_controllers_.size(); i++)
@@ -1327,12 +1336,12 @@ void Engine::checkGameControllers()
             if (game_controllers_[i])
             {
                 std::string name = SDL_GetGamepadName(game_controllers_[i]);
-                kys::print("{}\n", name);
+                fmt::print("{}\n", name);
                 if (name.find("Switch") != std::string::npos) { nintendo_switch_[i] = 1; }
             }
             else
             {
-                kys::print("Warning: Unable to open game controller {}! SDL Error: {}\n", joystick_id, SDL_GetError());
+                fmt::print("Warning: Unable to open game controller {}! SDL Error: {}\n", joystick_id, SDL_GetError());
             }
         }
     }
@@ -1467,4 +1476,6 @@ int Engine::saveTexture(Texture* tex, const char* filename) const
     resetRenderTarget();
     return 0;
 }
+
+
 

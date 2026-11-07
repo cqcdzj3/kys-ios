@@ -61,7 +61,7 @@ file(GLOB SRC_LIST
 )
 
 # 闈欐€佸簱锛坴cpkg arm64-ios 鎻愪緵 <name>.a / lib<name>.a锛?set(LINK_LIBS "")
-foreach(lib sdl3 SDL3 SDL3_ttf SDL3_image SDL3_mixer sqlite3 yaml-cpp iconv)
+foreach(lib sdl3 SDL3 SDL3_ttf SDL3_image SDL3_mixer sqlite3 yaml-cpp iconv fmt)
   find_library(${lib}_LIB
       NAMES ${lib} lib${lib}
       PATHS ${VCPKG_LIB}
@@ -112,5 +112,6 @@ else()
 endif()
 
 target_link_libraries(kys ${LINK_LIBS})
+
 
 

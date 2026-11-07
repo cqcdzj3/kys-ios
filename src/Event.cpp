@@ -1,22 +1,41 @@
 ﻿#include "Event.h"
+#include <fmt/format.h>
 #include "Audio.h"
+#include <fmt/format.h>
 #include "BattleScene.h"
+#include <fmt/format.h>
 #include "BattleSceneHades.h"
+#include <fmt/format.h>
 #include "BattleSceneSekiro.h"
+#include <fmt/format.h>
 #include "Font.h"
+#include <fmt/format.h>
 #include "GameUtil.h"
+#include <fmt/format.h>
 #include "GrpIdxFile.h"
+#include <fmt/format.h>
 #include "MainScene.h"
+#include <fmt/format.h>
 #include "Menu.h"
+#include <fmt/format.h>
 #include "PotConv.h"
+#include <fmt/format.h>
 #include "Save.h"
+#include <fmt/format.h>
 #include "ScriptCifa.h"
+#include <fmt/format.h>
 #include "SubScene.h"
+#include <fmt/format.h>
 #include "Talk.h"
+#include <fmt/format.h>
 #include "TextureManager.h"
+#include <fmt/format.h>
 #include "UIShop.h"
+#include <fmt/format.h>
 #include "filefunc.h"
+#include <fmt/format.h>
 #include "strfunc.h"
+#include <fmt/format.h>
 
 Event::Event()
 {
@@ -158,8 +177,8 @@ bool Event::callEvent(int event_id, RunNode* subscene, int supmap_id, int item_i
 
     if (use_script_)
     {
-        auto cifa_script = std::format("{}script/event-cifa/{}.cifa", GameUtil::PATH(), event_id);
-        auto cifa_c_script = std::format("{}script/event-cifa/{}.c", GameUtil::PATH(), event_id);
+        auto cifa_script = fmt::format("{}script/event-cifa/{}.cifa", GameUtil::PATH(), event_id);
+        auto cifa_c_script = fmt::format("{}script/event-cifa/{}.c", GameUtil::PATH(), event_id);
         if (filefunc::fileExist(cifa_script))
         {
             LOG("Event {} ({} of current scene): {}\n", event_id, event_index_, cifa_script);
@@ -424,7 +443,7 @@ void Event::addItemWithNotice(int item_id, int count, const std::string& notice)
     layoutEventUI();
     constexpr int font_size = 20;
     constexpr int text_gap = 28;
-    auto text = std::format("獲得{}  {}", Save::getInstance()->getItem(item_id)->Name, count);
+    auto text = fmt::format("獲得{}  {}", Save::getInstance()->getItem(item_id)->Name, count);
     auto item_texture = TextureManager::getInstance()->getTexture("item", item_id);
     if (item_texture)
     {
@@ -860,7 +879,7 @@ void Event::oldLearnMagic(int role_id, int magic_id, int no_display)
     auto m = Save::getInstance()->getMagic(magic_id);
     r->learnMagic(m);
     if (no_display) { return; }
-    showTextNotice(std::format("{}習得武學{}", r->Name, m->Name));
+    showTextNotice(fmt::format("{}習得武學{}", r->Name, m->Name));
 }
 
 void Event::addIQ(int role_id, int value)
@@ -868,7 +887,7 @@ void Event::addIQ(int role_id, int value)
     auto r = Save::getInstance()->getRole(role_id);
     auto v0 = r->IQ;
     r->IQ = GameUtil::clamp(v0 + value, 0, Role::getMaxValue()->IQ);
-    showTextNotice(std::format("{}資質增加{}", r->Name, r->IQ - v0));
+    showTextNotice(fmt::format("{}資質增加{}", r->Name, r->IQ - v0));
 }
 
 void Event::setRoleMagic(int role_id, int magic_index_role, int magic_id, int level)
@@ -1037,7 +1056,7 @@ void Event::addSpeed(int role_id, int value)
     auto r = Save::getInstance()->getRole(role_id);
     auto v0 = r->Speed;
     r->Speed = GameUtil::clamp(v0 + value, 0, Role::getMaxValue()->Speed);
-    showTextNotice(std::format("{}輕功增加{}", r->Name, r->Speed - v0));
+    showTextNotice(fmt::format("{}輕功增加{}", r->Name, r->Speed - v0));
 }
 
 void Event::addMaxMP(int role_id, int value)
@@ -1046,7 +1065,7 @@ void Event::addMaxMP(int role_id, int value)
     auto v0 = r->MaxMP;
     r->MaxMP = GameUtil::clamp(v0 + value, 0, Role::getMaxValue()->MP);
     r->MP = GameUtil::clamp(r->MP + value, 0, r->MaxMP);
-    showTextNotice(std::format("{}內力增加{}", r->Name, r->MaxMP - v0));
+    showTextNotice(fmt::format("{}內力增加{}", r->Name, r->MaxMP - v0));
 }
 
 void Event::addAttack(int role_id, int value)
@@ -1054,7 +1073,7 @@ void Event::addAttack(int role_id, int value)
     auto r = Save::getInstance()->getRole(role_id);
     auto v0 = r->Attack;
     r->Attack = GameUtil::clamp(v0 + value, 0, Role::getMaxValue()->Attack);
-    showTextNotice(std::format("{}武力增加{}", r->Name, r->Attack - v0));
+    showTextNotice(fmt::format("{}武力增加{}", r->Name, r->Attack - v0));
 }
 
 void Event::addMaxHP(int role_id, int value)
@@ -1063,7 +1082,7 @@ void Event::addMaxHP(int role_id, int value)
     auto v0 = r->MaxHP;
     r->MaxHP = GameUtil::clamp(v0 + value, 0, Role::getMaxValue()->HP);
     r->HP = GameUtil::clamp(r->HP + value, 0, r->MaxHP);
-    showTextNotice(std::format("{}生命增加{}", r->Name, r->MaxHP - v0));
+    showTextNotice(fmt::format("{}生命增加{}", r->Name, r->MaxHP - v0));
 }
 
 void Event::setMPType(int role_id, int value)
@@ -1084,12 +1103,12 @@ void Event::askSoftStar()
 
 void Event::showMorality()
 {
-    showTextNotice(std::format("你的道德指數為{}", Save::getInstance()->getRole(0)->Morality));
+    showTextNotice(fmt::format("你的道德指數為{}", Save::getInstance()->getRole(0)->Morality));
 }
 
 void Event::showFame()
 {
-    showTextNotice(std::format("你的聲望指數為{}", Save::getInstance()->getRole(0)->Fame));
+    showTextNotice(fmt::format("你的聲望指數為{}", Save::getInstance()->getRole(0)->Fame));
 }
 
 void Event::openAllSubMap()
@@ -1719,3 +1738,4 @@ void Event::instruct_50e(int code, int e1, int e2, int e3, int e4, int e5, int e
     default: break;
     }
 }
+

@@ -1,10 +1,17 @@
 ﻿#include "Save.h"
+#include <fmt/format.h>
 #include "GameUtil.h"
+#include <fmt/format.h>
 #include "GrpIdxFile.h"
+#include <fmt/format.h>
 #include "NewSave.h"
+#include <fmt/format.h>
 #include "PotConv.h"
+#include <fmt/format.h>
 #include "ZipFile2.h"
+#include <fmt/format.h>
 #include "filefunc.h"
+#include <fmt/format.h>
 
 Save::Save()
 {
@@ -28,11 +35,11 @@ std::string Save::getFilename(int i, char c)
     {
         if (c == 'r')
         {
-            filename = std::format("{}save/{}.db", GameUtil::PATH(), i);
+            filename = fmt::format("{}save/{}.db", GameUtil::PATH(), i);
         }
         else
         {
-            filename = std::format("{}save/{}{}.grp", GameUtil::PATH(), c, i);
+            filename = fmt::format("{}save/{}{}.grp", GameUtil::PATH(), c, i);
         }
     }
     else
@@ -52,7 +59,7 @@ std::string Save::getFilename(int i, char c)
     }
     if (c == 'z')
     {
-        filename = std::format("{}save/{}.zip", GameUtil::PATH(), i);
+        filename = fmt::format("{}save/{}.zip", GameUtil::PATH(), i);
     }
     return filename;
 }
@@ -191,7 +198,7 @@ bool Save::save(int num)
         db.BeginTransaction();
         for (int i = 0; i < submap_count; i++)
         {
-            cmd = std::format("insert into bindata values(?, ?, ?)");
+            cmd = fmt::format("insert into bindata values(?, ?, ?)");
             auto stmt = db.prepare(cmd);
             stmt.bind(1, i);
 
@@ -486,3 +493,4 @@ void Save::runSql(const std::string& cmd)
             [&]() { NewSave::LoadDBShopSave(db, shops_mem_); }, true);
     }
 }
+

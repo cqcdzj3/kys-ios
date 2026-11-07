@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <cmath>
 #include <deque>
-#include <format>
+#include <fmt/format.h>
 #include <functional>
 #include <list>
 #include <map>
@@ -784,7 +784,7 @@ private:
     static bool read_text_file(const std::string& filename, std::string& content);
     std::string preprocess_includes(const std::string& source, const std::string& current_file, const std::string& current_dir, const std::vector<std::string>& extra_include_dirs, std::set<std::string>& visited);
     template <typename... Args>
-    void add_error(size_t line, size_t col, std::format_string<Args...> format, Args&&... args)
+    void add_error(size_t line, size_t col, fmt::format_string<Args...> format, Args&&... args)
     {
         ErrorMessage e;
         e.expanded_line = line;
@@ -799,22 +799,22 @@ private:
             e.source_text = source_line.text;
             e.has_source_text = true;
         }
-        e.message = std::format(format, std::forward<Args>(args)...);
+        e.message = fmt::format(format, std::forward<Args>(args)...);
         record_error(std::move(e));
     }
 
     template <typename... Args>
-    void add_error(const std::string& filename, size_t line, size_t col, std::format_string<Args...> format, Args&&... args)
+    void add_error(const std::string& filename, size_t line, size_t col, fmt::format_string<Args...> format, Args&&... args)
     {
         ErrorMessage e;
         e.filename = filename;
         e.line = line;
         e.col = col;
-        e.message = std::format(format, std::forward<Args>(args)...);
+        e.message = fmt::format(format, std::forward<Args>(args)...);
         record_error(std::move(e));
     }
     template <typename... Args>
-    void add_error(CalUnit& c, std::format_string<Args...> format, Args&&... args)
+    void add_error(CalUnit& c, fmt::format_string<Args...> format, Args&&... args)
     {
         add_error(c.line, c.col, format, std::forward<Args>(args)...);
     }
@@ -844,4 +844,5 @@ private:
 };
 
 }    // namespace cifa
+
 

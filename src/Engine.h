@@ -1,16 +1,25 @@
 ﻿#pragma once
 
 #include "SDL3/SDL.h"
-#include "KysPrint.h"
+#include <fmt/format.h>
+#include <fmt/format.h>
 #include "SDL3_ttf/SDL_ttf.h"
+#include <fmt/format.h>
 
 #include <algorithm>
+#include <fmt/format.h>
 #include <chrono>
+#include <fmt/format.h>
 #include <functional>
+#include <fmt/format.h>
 #include <print>
+#include <fmt/format.h>
 #include <string>
+#include <fmt/format.h>
 #include <thread>
+#include <fmt/format.h>
 #include <unordered_map>
+#include <fmt/format.h>
 
 #define WIN32_LEAN_AND_MEAN
 #ifndef NOMINMAX
@@ -534,7 +543,7 @@ public:
     {
         if (getTicks() != time_)
         {
-            kys::print("{}\n", static_cast<long long>(getTicks() - time_));
+            fmt::print("{}\n", static_cast<long long>(getTicks() - time_));
         }
     }
 
@@ -698,5 +707,7 @@ private:
     char buf_[BUFSIZ] = { 0 };
     FILE* f_;
 };
+
+
 
 

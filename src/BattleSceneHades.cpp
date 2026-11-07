@@ -1,12 +1,21 @@
 ﻿#include "BattleSceneHades.h"
+#include <fmt/format.h>
 #include "Audio.h"
+#include <fmt/format.h>
 #include "Event.h"
+#include <fmt/format.h>
 #include "Font.h"
+#include <fmt/format.h>
 #include "GameUtil.h"
+#include <fmt/format.h>
 #include "Head.h"
+#include <fmt/format.h>
 #include "MainScene.h"
+#include <fmt/format.h>
 #include "TeamMenu.h"
+#include <fmt/format.h>
 #include "Weather.h"
+#include <fmt/format.h>
 
 BattleSceneHades::BattleSceneHades()
 {
@@ -783,7 +792,7 @@ void BattleSceneHades::backRun1()
             AttackEffect ae1;
             ae1.FollowRole = r;
             //ae1.EffectNumber = eft[rand_.rand() * eft.size()];
-            ae1.setPath(std::format("eft/bld{:03}", int(rand_.rand() * 5)));
+            ae1.setPath(fmt::format("eft/bld{:03}", int(rand_.rand() * 5)));
             ae1.TotalFrame = ae1.TotalEffectFrame;
             ae1.Frame = 0;
             attack_effects_.push_back(std::move(ae1));
@@ -1111,7 +1120,7 @@ void BattleSceneHades::Action(Role* r)
                 //    c = { 255, 20, 220, 20 };
                 //}
                 //const int left = std::max(0, Save::getInstance()->getItemCountInBag(item->ID) - 1);
-                //te.set(std::format("服用{}，剩余{}", item->Name, left), c, r);
+                //te.set(fmt::format("服用{}，剩余{}", item->Name, left), c, r);
                 //text_effects_.push_back(std::move(te));
             }
             else if (item->ItemType == 4)
@@ -1732,3 +1741,4 @@ int BattleSceneHades::calRolePic(Role* r, int style, int frame)
 void BattleSceneHades::makeSpecialMagicEffect()
 {
 }
+

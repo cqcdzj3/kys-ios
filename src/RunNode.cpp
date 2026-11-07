@@ -1,10 +1,17 @@
 ﻿#include "RunNode.h"
+#include <fmt/format.h>
 #include "McpServer.h"
+#include <fmt/format.h>
 #include "Audio.h"
+#include <fmt/format.h>
 #include "Font.h"
+#include <fmt/format.h>
 #include "GameUtil.h"
+#include <fmt/format.h>
 #include "UISystem.h"
+#include <fmt/format.h>
 #include "VirtualStick.h"
+#include <fmt/format.h>
 
 std::vector<std::shared_ptr<RunNode>> RunNode::root_;
 double RunNode::global_prev_present_ticks_ = 0;
@@ -568,8 +575,8 @@ void RunNode::present()
     {
         int w = e->getPresentWidth();
         int h = e->getPresentHeight();
-        Font::getInstance()->draw(std::format("Render one frame in {:.3f} ms", t), 20, w - 300, h - 60);
-        Font::getInstance()->draw(std::format("Render texture time is {}", Engine::getInstance()->getRenderTimes()), 20, w - 300, h - 35);
+        Font::getInstance()->draw(fmt::format("Render one frame in {:.3f} ms", t), 20, w - 300, h - 60);
+        Font::getInstance()->draw(fmt::format("Render texture time is {}", Engine::getInstance()->getRenderTimes()), 20, w - 300, h - 35);
         e->resetRenderTimes();
     }
     e->resetRenderTarget();
@@ -669,3 +676,4 @@ int RunNode::drawAndPresent(int times, std::function<void(void*)> func, void* da
     }
     return times;
 }
+

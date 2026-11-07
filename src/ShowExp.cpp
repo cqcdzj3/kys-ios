@@ -1,7 +1,11 @@
 ﻿#include "ShowExp.h"
+#include <fmt/format.h>
 #include "Engine.h"
+#include <fmt/format.h>
 #include "Font.h"
+#include <fmt/format.h>
 #include "TextureManager.h"
+#include <fmt/format.h>
 
 ShowExp::ShowExp()
 {
@@ -70,7 +74,8 @@ void ShowExp::draw()
         int row_x = Engine::getInstance()->getUIWidth() / 2 - row_width / 2;
         int x = row_x + col * item_width, y = y_ + 50 + row * row_height;
         TextureManager::getInstance()->renderTexture("head", r->HeadID, x, y, { { 255, 255, 255, 255 }, 255, 0.5, 0.5 });
-        Font::getInstance()->draw(std::format("{}", r->Name), 20, x + 90, y + 30, { 255, 255, 255, 255 });
-        Font::getInstance()->draw(std::format("{}", r->ExpGot), 20, x + 90, y + 55, { 255, 255, 255, 255 });
+        Font::getInstance()->draw(fmt::format("{}", r->Name), 20, x + 90, y + 30, { 255, 255, 255, 255 });
+        Font::getInstance()->draw(fmt::format("{}", r->ExpGot), 20, x + 90, y + 55, { 255, 255, 255, 255 });
     }
 }
+

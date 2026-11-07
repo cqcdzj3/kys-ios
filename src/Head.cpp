@@ -1,8 +1,13 @@
 ﻿#include "Head.h"
+#include <fmt/format.h>
 #include "Font.h"
+#include <fmt/format.h>
 #include "GameUtil.h"
+#include <fmt/format.h>
 #include "Save.h"
+#include <fmt/format.h>
 #include "TextureManager.h"
+#include <fmt/format.h>
 
 Head::Head(Role* r)
 {
@@ -84,7 +89,7 @@ void Head::draw()
         }
         font->draw(role_->Name, 16, x_ + 117, y_ + 9, white, alpha_text);
         Rect r1 = { 0, 0, 0, 0 };
-        font->draw(std::format("{}", role_->Level), 16, x_ + 99 - 4 * GameUtil::digit(role_->Level), y_ + 5, { 250, 200, 50, 255 }, alpha_text);
+        font->draw(fmt::format("{}", role_->Level), 16, x_ + 99 - 4 * GameUtil::digit(role_->Level), y_ + 5, { 250, 200, 50, 255 }, alpha_text);
         Color c, c_text;
         int hp_for_bar = GameUtil::clamp(role_->HP, 0, role_->MaxHP);
         if (role_->MaxHP > 0)
@@ -98,7 +103,7 @@ void Head::draw()
         c = { 196, 25, 16, 255 };
 
         Engine::getInstance()->renderSquareTexture(&r1, c, alpha_ribbon);
-        font->draw(std::format("{:3}/{:3}", hp_for_bar, role_->MaxHP), 16, x_ + 138, y_ + 28, { 250, 200, 50, 255 }, alpha_text);
+        font->draw(fmt::format("{:3}/{:3}", hp_for_bar, role_->MaxHP), 16, x_ + 138, y_ + 28, { 250, 200, 50, 255 }, alpha_text);
         if (role_->MaxMP > 0)
         {
             r1 = { x_ + 96, y_ + 48, 138 * role_->MP / role_->MaxMP, 9 };
@@ -120,11 +125,11 @@ void Head::draw()
             c_text = { 250, 200, 50, 255 };
         }
         Engine::getInstance()->renderSquareTexture(&r1, c, alpha_ribbon);
-        font->draw(std::format("{:3}/{:3}", role_->MP, role_->MaxMP), 16, x_ + 138, y_ + 44, c_text, alpha_text);
+        font->draw(fmt::format("{:3}/{:3}", role_->MP, role_->MaxMP), 16, x_ + 138, y_ + 44, c_text, alpha_text);
         r1 = { x_ + 115, y_ + 65, 83 * role_->PhysicalPower / 100, 9 };
         c = { 128, 128, 255, 255 };
         Engine::getInstance()->renderSquareTexture(&r1, c, alpha_ribbon);
-        font->draw(std::format("{}", role_->PhysicalPower), 16, x_ + 154 - 4 * GameUtil::digit(role_->PhysicalPower), y_ + 61, { 250, 200, 50, 255 }, alpha_text);
+        font->draw(fmt::format("{}", role_->PhysicalPower), 16, x_ + 154 - 4 * GameUtil::digit(role_->PhysicalPower), y_ + 61, { 250, 200, 50, 255 }, alpha_text);
     }
     else if (style_ == 1)
     {
@@ -146,7 +151,7 @@ void Head::draw()
         c = { 196, 25, 16, 255 };
         Engine::getInstance()->renderSquareTexture(&r1, c, 192);
         font->draw(role_->Name, 20, x_ - 10 - font->getTextDrawSize(role_->Name) * 10, y_ - 4, white);
-        font->draw(std::format("{}/{}", hp_for_bar, role_->MaxHP), 16, x_ + width_ + 10, y_ - 2, white);
+        font->draw(fmt::format("{}/{}", hp_for_bar, role_->MaxHP), 16, x_ + width_ + 10, y_ - 2, white);
     }
     else if (style_ == 2)
     {
@@ -174,7 +179,7 @@ void Head::draw()
         {
             font->draw(m->Name, 15, x_ + Font::getTextDrawSize(role_->Name) * 10 + 30, y_ + 5, white);
         }
-        font->draw(std::format("{}/{}", hp_for_bar, role_->MaxHP), 12, x_ + width_ + 10, y_ + 25, white);
+        font->draw(fmt::format("{}/{}", hp_for_bar, role_->MaxHP), 12, x_ + width_ + 10, y_ + 25, white);
         int length = std::max(0.0, role_->Posture * 5);
         int w_tex = TextureManager::getInstance()->getTexture("title", 203)->w;
         int h_tex = TextureManager::getInstance()->getTexture("title", 203)->h;
@@ -195,3 +200,4 @@ void Head::draw()
     MP_ = std::max(MP_ - 1 - role_->MaxMP / 1000, role_->MP);
     PhysicalPower_ = std::max(PhysicalPower_ - 1, role_->PhysicalPower);
 }
+

@@ -13,7 +13,7 @@
 #include "Timer.h"
 #include "UI.h"
 #include "Weather.h"
-#include <format>
+#include <fmt/format.h>
 #include <cmath>
 #include <algorithm>
 
@@ -473,7 +473,7 @@ void SubScene::onEntrance()
     //暂时不使用这种方法，地面的动态效果会消失
     Engine::getInstance()->createRenderedTexture("searth", COORD_COUNT * TILE_W * 2, COORD_COUNT * TILE_H * 2);
     reDrawEarthTexture();
-    //Engine::getInstance()->saveTexture(earth_texture, std::format("{}.bmp", submap_id_).c_str());
+    //Engine::getInstance()->saveTexture(earth_texture, fmt::format("{}.bmp", submap_id_).c_str());
     //Fade::fadeIn(8);
     auto scene_name = std::make_shared<TextBox>();
     scene_name->setFontSize(24);
@@ -745,3 +745,4 @@ void SubScene::walkScriptStep(int x, int y)
     } while (walking_);
     walk_next_started_ = -1;
 }
+

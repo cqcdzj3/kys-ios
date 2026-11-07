@@ -1,25 +1,47 @@
 ﻿#include "Console.h"
+#include <fmt/format.h>
 #include "BattleNetwork.h"
+#include <fmt/format.h>
 #include "BattleScene.h"
+#include <fmt/format.h>
 #include "DrawableOnCall.h"
+#include <fmt/format.h>
 #include "Event.h"
+#include <fmt/format.h>
 #include "Font.h"
+#include <fmt/format.h>
 #include "InputBox.h"
+#include <fmt/format.h>
 #include "MainScene.h"
+#include <fmt/format.h>
 #include "PotConv.h"
+#include <fmt/format.h>
 #include "Save.h"
+#include <fmt/format.h>
 #include "SuperMenuText.h"
+#include <fmt/format.h>
 #include "TextureManager.h"
+#include <fmt/format.h>
 #include "strfunc.h"
+#include <fmt/format.h>
 #include <algorithm>
+#include <fmt/format.h>
 #include <functional>
+#include <fmt/format.h>
 #include <iostream>
+#include <fmt/format.h>
 #include <sstream>
+#include <fmt/format.h>
 #include <string>
+#include <fmt/format.h>
 #include <unordered_map>
+#include <fmt/format.h>
 #include <unordered_set>
+#include <fmt/format.h>
 #include <utility>
+#include <fmt/format.h>
 #include <vector>
+#include <fmt/format.h>
 
 Console::Console()
 {
@@ -85,8 +107,8 @@ Console::Console()
             int fontSize = 28;
             TextureManager::getInstance()->renderTexture("title", 126, nx, ny, { { 192, 192, 192, 255 }, 255 }, 400, 400);
             //Engine::getInstance()->fillColor({ 0, 0, 0, 192 }, nx, ny, 400, 400);
-            Font::getInstance()->draw(std::format("{}，{}", scene->Name, scene->ID), fontSize, nx + 20, ny + 20, { 0, 0, 0, 255 });
-            Font::getInstance()->draw(std::format("（{}，{}）", scene->MainEntranceX1, scene->MainEntranceY1),
+            Font::getInstance()->draw(fmt::format("{}，{}", scene->Name, scene->ID), fontSize, nx + 20, ny + 20, { 0, 0, 0, 255 });
+            Font::getInstance()->draw(fmt::format("（{}，{}）", scene->MainEntranceX1, scene->MainEntranceY1),
                 fontSize, nx + 20, ny + 20 + fontSize * 1.5, { 0, 0, 0, 255 });
 
             int man_x_ = scene->MainEntranceX1;
@@ -258,3 +280,4 @@ Console::Console()
         //Save::getInstance()->load(11);
     }
 }
+

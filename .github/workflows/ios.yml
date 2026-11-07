@@ -36,7 +36,7 @@ jobs:
           set -euxo pipefail
           "$VCPKG_ROOT/vcpkg" install \
             sdl3 sdl3-ttf "sdl3-image[core,png]" "sdl3-mixer[core]" \
-            sqlite3 yaml-cpp glaze asio picosha2 libiconv \
+            sqlite3 yaml-cpp glaze asio picosha2 libiconv fmt \
             --triplet arm64-ios
           echo "--- installed libs ---"
           ls -1 "$VCPKG_ROOT/installed/arm64-ios/lib" | head -60 || true
@@ -105,5 +105,6 @@ jobs:
           gh release view ci-latest >/dev/null 2>&1 || gh release create ci-latest --title "CI latest" --notes "auto-published build log" || true
           if [ -f build.log ]; then gh release upload ci-latest build.log --clobber || true; fi
           if [ -f kys-unsigned.ipa ]; then gh release upload ci-latest kys-unsigned.ipa --clobber || true; fi
+
 
 

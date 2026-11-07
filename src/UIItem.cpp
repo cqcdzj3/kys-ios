@@ -1,13 +1,23 @@
 ﻿#include "UIItem.h"
+#include <fmt/format.h>
 #include "Event.h"
+#include <fmt/format.h>
 #include "Font.h"
+#include <fmt/format.h>
 #include "GameUtil.h"
+#include <fmt/format.h>
 #include "MainScene.h"
+#include <fmt/format.h>
 #include "Save.h"
+#include <fmt/format.h>
 #include "ShowRoleDifference.h"
+#include <fmt/format.h>
 #include "TeamMenu.h"
+#include <fmt/format.h>
 #include "TextureManager.h"
+#include <fmt/format.h>
 #include "UI.h"
+#include <fmt/format.h>
 
 UIItem::UIItem()
 {
@@ -487,7 +497,7 @@ void UIItem::showItemProperty(Item* item)
     {
         int man_x, man_y;
         MainScene::getInstance()->getManPosition(man_x, man_y);
-        auto str = std::format("當前坐標 {}, {}", man_x, man_y);
+        auto str = fmt::format("當前坐標 {}, {}", man_x, man_y);
         addOneProperty(str, 1);
         l = showAddedProperty(size, c, x, y);
         bottom_y = (std::max)(bottom_y, y + l * size);
@@ -536,7 +546,7 @@ void UIItem::showItemProperty(Item* item)
     auto magic = Save::getInstance()->getMagic(item->MagicID);
     if (magic)
     {
-        auto str = std::format("習得武學{}", magic->Name);
+        auto str = fmt::format("習得武學{}", magic->Name);
         addOneProperty(str, 1);
     }
     l = showAddedProperty(size, c, x, y);
@@ -557,7 +567,7 @@ void UIItem::showItemProperty(Item* item)
     auto role = Save::getInstance()->getRole(item->OnlySuitableRole);
     if (role)
     {
-        auto str = std::format("僅適合{}", role->Name);
+        auto str = fmt::format("僅適合{}", role->Name);
         addOneProperty(str, 1);
     }
 
@@ -619,7 +629,7 @@ void UIItem::addOneProperty(const std::string& format_str, int v)
 {
     if (v != 0)
     {
-        properties_.push_back(std::format(std::runtime_format(format_str), v));
+        properties_.push_back(fmt::format(std::runtime_format(format_str), v));
     }
 }
 
@@ -692,7 +702,7 @@ void UIItem::onPressedOK()
             {
                 auto team_menu = std::make_shared<TeamMenu>();
                 team_menu->setItem(current_item_);
-                team_menu->setText(std::format("誰要使用{}", current_item_->Name));
+                team_menu->setText(fmt::format("誰要使用{}", current_item_->Name));
                 team_menu->run();
                 role = team_menu->getRole();
             }
@@ -701,7 +711,7 @@ void UIItem::onPressedOK()
                 Role r = *role;
                 role->useItem(current_item_);
                 auto df = std::make_shared<ShowRoleDifference>(&r, role);
-                df->setText(std::format("{}服用{}", role->Name, current_item_->Name));
+                df->setText(fmt::format("{}服用{}", role->Name, current_item_->Name));
                 df->run();
                 Event::getInstance()->addItemWithoutHint(current_item_->ID, -1);
             }
@@ -717,7 +727,7 @@ void UIItem::onPressedOK()
                 {
                     format_str = "誰要裝備{}";
                 }
-                team_menu->setText(std::format(std::runtime_format(format_str), current_item_->Name));
+                team_menu->setText(fmt::format(std::runtime_format(format_str), current_item_->Name));
                 team_menu->run();
                 role = team_menu->getRole();
             }
@@ -748,3 +758,4 @@ void UIItem::onPressedCancel()
     current_item_ = nullptr;
     exitWithResult(-1);
 }
+

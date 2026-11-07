@@ -1,11 +1,19 @@
 ﻿#include "BattleMenu.h"
+#include <fmt/format.h>
 #include "BattleScene.h"
+#include <fmt/format.h>
 #include "Event.h"
+#include <fmt/format.h>
 #include "Font.h"
+#include <fmt/format.h>
 #include "PotConv.h"
+#include <fmt/format.h>
 #include "Random.h"
+#include <fmt/format.h>
 #include "Save.h"
+#include <fmt/format.h>
 #include "strfunc.h"
+#include <fmt/format.h>
 
 BattleActionMenu::BattleActionMenu(BattleScene* b)
 {
@@ -543,7 +551,7 @@ void BattleMagicMenu::setRole(Role* r)
         {
             std::string s = m->Name;
             s += std::string(12 - Font::getTextDrawSize(s), ' ');
-            magic_names.push_back(std::format("{}{:2}  ", s, role_->getRoleShowLearnedMagicLevel(i)));
+            magic_names.push_back(fmt::format("{}{:2}  ", s, role_->getRoleShowLearnedMagicLevel(i)));
         }
         else
         {
@@ -609,7 +617,7 @@ void BattleEquipItemMenu::setRole(Role* r)
 
         std::string s = item->Name;
         s += std::string(12 - Font::getTextDrawSize(s), ' ');
-        item_names.push_back(std::format("{}{:3}  ", s, count));
+        item_names.push_back(fmt::format("{}{:3}  ", s, count));
     }
     setStrings(item_names);
 
@@ -709,3 +717,4 @@ std::vector<Item*> BattleItemMenu::getAvaliableItems(Role* role, int type)
     item_menu.setForceItemType({type});
     return item_menu.getAvaliableItems();
 }
+

@@ -1,10 +1,17 @@
 ﻿#include "UISave.h"
+#include <fmt/format.h>
 #include "Event.h"
+#include <fmt/format.h>
 #include "MainScene.h"
+#include <fmt/format.h>
 #include "Save.h"
+#include <fmt/format.h>
 #include "SubScene.h"
+#include <fmt/format.h>
 #include "UI.h"
+#include <fmt/format.h>
 #include "filefunc.h"
+#include <fmt/format.h>
 
 UISave::UISave()
 {
@@ -26,10 +33,10 @@ UISave::UISave()
     };
     for (int i = 0; i <= 10; i++)
     {
-        auto str = std::format("進度{:02}  {}", i, get_save_time(i));
+        auto str = fmt::format("進度{:02}  {}", i, get_save_time(i));
         strings.push_back(str);
     }
-    auto str = std::format("自動檔  {}", get_save_time(AUTO_SAVE_ID));
+    auto str = fmt::format("自動檔  {}", get_save_time(AUTO_SAVE_ID));
     strings.push_back(str);
     setStrings(strings);
     childs_[0]->setVisible(false);    //屏蔽进度0
@@ -125,3 +132,4 @@ void UISave::save(int r)
     }
     save->save(r);
 }
+

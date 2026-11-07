@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <cstdio>
 #include <numeric>
-#include <format>
+#include <fmt/format.h>
 #include "test_process.h"
 
 using namespace cifa;
@@ -229,13 +229,13 @@ bool runtime_error_abort_test()
         auto result = interpreter.run_script("sum = 7; " + script + " touch();");
         if (result.getSpecialType() != "Error" || !interpreter.has_runtime_error() || calls != 0)
         {
-            std::println(stderr, "Runtime abort failed: {} (calls={}, result={})\n{}{}",
+            fmt::println(stderr, "Runtime abort failed: {} (calls={}, result={})\n{}{}",
                 script, calls, result.getSpecialType(), interpreter.get_errors_str(), interpreter.get_runtime_error());
             return false;
         }
         if (script.find("run_string(") != std::string::npos && interpreter.is_exit_requested())
         {
-            std::println(stderr, "Nested exit flag leaked: {}", script);
+            fmt::println(stderr, "Nested exit flag leaked: {}", script);
             return false;
         }
         result = interpreter.run_script("touch(); return 42;");
@@ -617,7 +617,7 @@ return sum;)",
         if (result.getSpecialType() != "Error" || !interpreter.has_runtime_error() || interpreter.has_error()
             || error.find("has no return value") == std::string::npos || error.find("^") == std::string::npos)
         {
-            std::println(stderr, "NoValue use did not fail: {}\n{}", script, error);
+            fmt::println(stderr, "NoValue use did not fail: {}\n{}", script, error);
             return false;
         }
         if (&script == &invalid_scripts.front())
@@ -627,7 +627,7 @@ return sum;)",
                 + std::string(header.size() + 11, ' ') + "^\n";
             if (error.find(expected) == std::string::npos)
             {
-                std::print(stderr, "NoValue call position mismatch:\n{}Expected:\n{}", error, expected);
+                fmt::print(stderr, "NoValue call position mismatch:\n{}Expected:\n{}", error, expected);
                 return false;
             }
         }
@@ -654,7 +654,7 @@ return sum;)",
             || error.find(origin, position + origin.size()) != std::string::npos
             || (delayed && error.find("<script>:3, col 12:") == std::string::npos))
         {
-            std::println(stderr, "Invalid NoValue diagnostic frames:\n{}", error);
+            fmt::println(stderr, "Invalid NoValue diagnostic frames:\n{}", error);
             return false;
         }
     }
@@ -687,7 +687,7 @@ return sum;)",
         if (interpreter.has_error() || interpreter.has_runtime_error()
             || !result.isNumber() || result.toInt() != 42)
         {
-            std::println(stderr, "Valid return use rejected: {}\n{}{}", script,
+            fmt::println(stderr, "Valid return use rejected: {}\n{}{}", script,
                 interpreter.get_errors_str(), interpreter.get_runtime_error());
             return false;
         }
@@ -713,7 +713,7 @@ return sum;)",
         if (interpreter.has_error() || interpreter.has_runtime_error() || result.getSpecialType() != "NoValue"
             || result.isNumber() || result.isType<std::string>())
         {
-            std::println(stderr, "Missing NoValue result: {}\n{}{}", script,
+            fmt::println(stderr, "Missing NoValue result: {}\n{}{}", script,
                 interpreter.get_errors_str(), interpreter.get_runtime_error());
             return false;
         }
@@ -743,7 +743,7 @@ return sum;)",
     if (interpreter.has_error() || interpreter.has_runtime_error()
         || !result.isNumber() || result.toInt() != 42)
     {
-        std::println(stderr, "Saved function call failed: {}{}", interpreter.get_errors_str(), interpreter.get_runtime_error());
+        fmt::println(stderr, "Saved function call failed: {}{}", interpreter.get_errors_str(), interpreter.get_runtime_error());
         return false;
     }
     result = interpreter.run_script("saved() { return 42; } return saved();");
@@ -777,10 +777,10 @@ bool script_function_argument_count_test()
             const std::string error = c.get_runtime_error();
             if (result.getSpecialType() != "Error" || error.find(expected) == std::string::npos)
             {
-                std::println(stderr, "  {} failed: expected runtime error: {}\n    actual: {}", label, expected, error);
+                fmt::println(stderr, "  {} failed: expected runtime error: {}\n    actual: {}", label, expected, error);
                 return false;
             }
-            std::println(stderr, "  {}: {}", label, error);
+            fmt::println(stderr, "  {}: {}", label, error);
             return true;
         };
 
@@ -1101,7 +1101,7 @@ bool typed_numeric_storage_test()
     )");
     if (!o.hasValue() || !o.toBool())
     {
-        std::println(stderr, "typed array and struct: result={}, error={}", o.toString(), c.get_runtime_error());
+        fmt::println(stderr, "typed array and struct: result={}, error={}", o.toString(), c.get_runtime_error());
         return false;
     }
     return true;
@@ -1121,7 +1121,7 @@ bool nested_vector_type_test()
         auto result = c.run_script(script);
         if (!result.hasValue() || !result.toBool() || c.has_runtime_error())
         {
-            std::println(stderr, "nested vector: script={}, result={}, error={}, compile={}", script,
+            fmt::println(stderr, "nested vector: script={}, result={}, error={}, compile={}", script,
                 result.toString(), c.get_runtime_error(), c.get_errors_str());
             return false;
         }
@@ -1370,11 +1370,11 @@ bool custom_operator_dispatch_test()
         (c.*callbacks).push_back([&calls](const Object&, const Object&) { ++calls; return Object(true); });
         for (const auto& operands : {std::pair{"host", "2"}, std::pair{"2", "host"}})
         {
-            auto result = c.run_script(std::format("return {} {} {};", operands.first, symbol, operands.second));
+            auto result = c.run_script(fmt::format("return {} {} {};", operands.first, symbol, operands.second));
             if (!result.isType<bool>() || !result.toBool() || c.has_runtime_error()) { return false; }
         }
         if (calls != 2) { return false; }
-        c.run_script(std::format("empty_function() {{}} unused = empty_function() {} 1; return 7;", symbol));
+        c.run_script(fmt::format("empty_function() {{}} unused = empty_function() {} 1; return 7;", symbol));
         if (!c.has_runtime_error() || c.get_runtime_error().find("has no return value") == std::string::npos) { return false; }
     }
     return true;
@@ -1400,7 +1400,7 @@ bool else_if_chain_test()
     Cifa c;
     const auto run_branch = [&c](int value)
         {
-            return c.run_script(std::format(R"(
+            return c.run_script(fmt::format(R"(
                 int value = {};
                 if (value == 3) {{ return 30; }}
                 else if (value == 2) {{ return 20; }}
@@ -1614,20 +1614,20 @@ static bool expect_syntax_error(const std::string& label, const std::string& scr
     c.set_output_error(false);
     c.run_script(script);
     std::string err = c.get_errors_str();
-    std::println(stderr, "  [{}]:", label);
+    fmt::println(stderr, "  [{}]:", label);
     if (err.find("Syntax Error:") == std::string::npos || err.find(keyword) == std::string::npos)
     {
-        std::println(stderr, "    FAIL: expected keyword \"{}\" in error output", keyword);
-        if (!err.empty()) { std::print(stderr, "    Got:\n{}", err); }
-        else { std::println(stderr, "    (no error produced)"); }
+        fmt::println(stderr, "    FAIL: expected keyword \"{}\" in error output", keyword);
+        if (!err.empty()) { fmt::print(stderr, "    Got:\n{}", err); }
+        else { fmt::println(stderr, "    (no error produced)"); }
         return false;
     }
     if (err.find("^") == std::string::npos)
     {
-        std::println(stderr, "    FAIL: missing caret (^) in error output");
+        fmt::println(stderr, "    FAIL: missing caret (^) in error output");
         return false;
     }
-    std::print(stderr, "{}", err);
+    fmt::print(stderr, "{}", err);
     return true;
 }
 
@@ -1638,13 +1638,13 @@ static bool expect_no_syntax_error(const std::string& label, const std::string& 
     c.set_output_error(false);
     c.run_script(script);
     std::string err = c.get_errors_str();
-    std::print(stderr, "  [{}]: ", label);
+    fmt::print(stderr, "  [{}]: ", label);
     if (!err.empty())
     {
-        std::print(stderr, "FAIL unexpected error:\n{}", err);
+        fmt::print(stderr, "FAIL unexpected error:\n{}", err);
         return false;
     }
-    std::println(stderr, "OK");
+    fmt::println(stderr, "OK");
     return true;
 }
 
@@ -1706,7 +1706,7 @@ bool static_syntax_error_test()
         if (err.find("unexpected character '#'") == std::string::npos
             || err.find("col 29") == std::string::npos)
         {
-            std::print(stderr, "  FAIL [unexpected character]: expected '#' at column 29\n    Got:\n{}", err);
+            fmt::print(stderr, "  FAIL [unexpected character]: expected '#' at column 29\n    Got:\n{}", err);
             ok = false;
         }
     }
@@ -1723,7 +1723,7 @@ bool static_syntax_error_test()
         if (!c.has_error() || err.find("not been initialized") == std::string::npos
             || err.find(expected) == std::string::npos)
         {
-            std::print(stderr, "  FAIL [error line number]: expected '<script>:2' and 'undef' in error output\n    Got:\n{}", err);
+            fmt::print(stderr, "  FAIL [error line number]: expected '<script>:2' and 'undef' in error output\n    Got:\n{}", err);
             ok = false;
         }
     }
@@ -1887,7 +1887,7 @@ bool loop_and_recursion_execution_test()
         if (interpreter.has_error() || interpreter.has_runtime_error()
             || !result.isNumber() || result.toInt() != expected)
         {
-            std::println(stderr, "  loop/recursion execution failed: {}", script);
+            fmt::println(stderr, "  loop/recursion execution failed: {}", script);
             return false;
         }
     }
@@ -1908,7 +1908,7 @@ bool array_methods_test()
         )");
         if (!o.hasValue() || o.toInt() != 3)
         {
-            std::println(stderr, "array push_back literal: {}", c1.get_runtime_error());
+            fmt::println(stderr, "array push_back literal: {}", c1.get_runtime_error());
             return false;
         }
     }
@@ -1923,7 +1923,7 @@ bool array_methods_test()
         )");
         if (!o.hasValue() || o.toInt() != 2)
         {
-            std::println(stderr, "array push_back typed: {}", c1.get_runtime_error());
+            fmt::println(stderr, "array push_back typed: {}", c1.get_runtime_error());
             return false;
         }
     }
@@ -1938,7 +1938,7 @@ bool array_methods_test()
         )");
         if (!o.hasValue() || o.toInt() != 3)
         {
-            std::println(stderr, "array pop_back: {}", c1.get_runtime_error());
+            fmt::println(stderr, "array pop_back: {}", c1.get_runtime_error());
             return false;
         }
     }
@@ -1952,7 +1952,7 @@ bool array_methods_test()
         )");
         if (!o.hasValue() || o.toInt() != 1234)
         {
-            std::println(stderr, "array insert: {}", c1.get_runtime_error());
+            fmt::println(stderr, "array insert: {}", c1.get_runtime_error());
             return false;
         }
     }
@@ -1966,7 +1966,7 @@ bool array_methods_test()
         )");
         if (!o.hasValue() || o.toInt() != 1340)
         {
-            std::println(stderr, "array erase: {}", c1.get_runtime_error());
+            fmt::println(stderr, "array erase: {}", c1.get_runtime_error());
             return false;
         }
     }
@@ -1980,7 +1980,7 @@ bool array_methods_test()
         )");
         if (!o.hasValue() || o.toInt() != 5)
         {
-            std::println(stderr, "array resize: {}", c1.get_runtime_error());
+            fmt::println(stderr, "array resize: {}", c1.get_runtime_error());
             return false;
         }
     }
@@ -1996,7 +1996,7 @@ bool array_methods_test()
         )");
         if (!o.hasValue() || o.toInt() != 66)
         {
-            std::println(stderr, "array reserve: {}", c1.get_runtime_error());
+            fmt::println(stderr, "array reserve: {}", c1.get_runtime_error());
             return false;
         }
     }
@@ -2010,7 +2010,7 @@ bool array_methods_test()
         )");
         if (!o.hasValue() || o.toInt() != 0)
         {
-            std::println(stderr, "array clear: {}", c1.get_runtime_error());
+            fmt::println(stderr, "array clear: {}", c1.get_runtime_error());
             return false;
         }
     }
@@ -2025,7 +2025,7 @@ bool array_methods_test()
         )");
         if (!o.hasValue() || o.toInt() != 10)
         {
-            std::println(stderr, "array contains: {}", c1.get_runtime_error());
+            fmt::println(stderr, "array contains: {}", c1.get_runtime_error());
             return false;
         }
     }
@@ -2611,7 +2611,7 @@ bool include_file_cases_test()
         if (interpreter.has_error() || interpreter.has_runtime_error()
             || !result.isNumber() || result.toDouble() != expected)
         {
-            std::print(stderr, "Include file failed: {}\n{}{}", file,
+            fmt::print(stderr, "Include file failed: {}\n{}{}", file,
                 interpreter.get_errors_str(), interpreter.get_runtime_error());
             ok = false;
         }
@@ -2745,7 +2745,7 @@ bool include_test()
     {
         if (!(this->*include_case.test)())
         {
-            std::println(stderr, "  include case failed: {}", include_case.name);
+            fmt::println(stderr, "  include case failed: {}", include_case.name);
             ok = false;
         }
     }
@@ -2902,7 +2902,7 @@ bool diagnostic_position_test()
         if (error.find(expected) == std::string::npos
             || (test.syntax ? !interpreter.has_error() : !interpreter.has_runtime_error()))
         {
-            std::print(stderr, "Diagnostic position mismatch:\n{}Expected:\n{}", error, expected);
+            fmt::print(stderr, "Diagnostic position mismatch:\n{}Expected:\n{}", error, expected);
             return false;
         }
     }
@@ -2934,7 +2934,7 @@ bool bytecode_runtime_error_parity_test()
             || ast.get_runtime_error().find(expected) == std::string::npos
             || bytecode.get_runtime_error().find(expected) == std::string::npos)
         {
-            std::println(stderr, "Bytecode runtime parity failed for: {}\nAST: {}{}\nBytecode: {}{}",
+            fmt::println(stderr, "Bytecode runtime parity failed for: {}\nAST: {}{}\nBytecode: {}{}",
                 script, ast.get_errors_str(), ast.get_runtime_error(),
                 bytecode.get_errors_str(), bytecode.get_runtime_error());
             return false;
@@ -2976,13 +2976,13 @@ static bool bytecode_values_equal(const Object& left, const Object& right)
 static std::string bytecode_value_summary(const Object& value)
 {
     if (!value.hasValue()) return "<empty>";
-    if (value.isInteger()) return std::format("int:{}", value.toInt64());
-    if (value.isType<double>()) return std::format("double:{}", value.toDouble());
-    if (value.isType<bool>()) return std::format("bool:{}", value.toBool());
-    if (value.isType<std::string>()) return std::format("string:{}", value.toString());
+    if (value.isInteger()) return fmt::format("int:{}", value.toInt64());
+    if (value.isType<double>()) return fmt::format("double:{}", value.toDouble());
+    if (value.isType<bool>()) return fmt::format("bool:{}", value.toBool());
+    if (value.isType<std::string>()) return fmt::format("string:{}", value.toString());
     if (value.getSpecialType() == "NoValue") return "NoValue";
-    if (value.isType<ObjectVector>()) return std::format("array(size={})", value.ref<ObjectVector>().size());
-    if (value.isType<ObjectMap>()) return std::format("map(size={})", value.ref<ObjectMap>().size());
+    if (value.isType<ObjectVector>()) return fmt::format("array(size={})", value.ref<ObjectVector>().size());
+    if (value.isType<ObjectMap>()) return fmt::format("map(size={})", value.ref<ObjectMap>().size());
     return value.getType().name();
 }
 
@@ -3011,7 +3011,7 @@ bool bytecode_result_parity_test()
         if (ast.has_error() || bytecode.has_error() || ast.has_runtime_error() || bytecode.has_runtime_error()
             || !bytecode_values_equal(ast_result, bytecode_result))
         {
-            std::println(stderr, "Bytecode result parity failed for: {}\nAST: {} errors={}{}\nBytecode: {} errors={}{}",
+            fmt::println(stderr, "Bytecode result parity failed for: {}\nAST: {} errors={}{}\nBytecode: {} errors={}{}",
                 script, bytecode_value_summary(ast_result), ast.get_errors_str(), ast.get_runtime_error(),
                 bytecode_value_summary(bytecode_result), bytecode.get_errors_str(), bytecode.get_runtime_error());
             return false;
@@ -3061,7 +3061,7 @@ bool bytecode_host_boundary_parity_test()
         || ast.has_error() || bytecode.has_error()
         || ast.has_runtime_error() || bytecode.has_runtime_error())
     {
-        std::println(stderr, "Bytecode host boundary parity failed: AST={} Bytecode={} AST errors={}{} Bytecode errors={}{}",
+        fmt::println(stderr, "Bytecode host boundary parity failed: AST={} Bytecode={} AST errors={}{} Bytecode errors={}{}",
             bytecode_value_summary(ast_result), bytecode_value_summary(bytecode_result),
             ast.get_errors_str(), ast.get_runtime_error(), bytecode.get_errors_str(), bytecode.get_runtime_error());
         return false;
@@ -3073,7 +3073,7 @@ bool bytecode_host_boundary_parity_test()
         interpreter.run_script("value = 1; exit(); value = 2;");
         if (interpreter.has_error() || interpreter.has_runtime_error())
         {
-            std::println(stderr, "Exit setup failed: errors={}{} exit={}",
+            fmt::println(stderr, "Exit setup failed: errors={}{} exit={}",
                 interpreter.get_errors_str(), interpreter.get_runtime_error(), interpreter.is_exit_requested());
             return false;
         }
@@ -3081,7 +3081,7 @@ bool bytecode_host_boundary_parity_test()
         const bool ok = !interpreter.has_error() && !interpreter.has_runtime_error()
             && result.isNumber() && result.toInt() == 1;
         if (!ok)
-            std::println(stderr, "Exit follow-up failed: result={} errors={}{} exit={}",
+            fmt::println(stderr, "Exit follow-up failed: result={} errors={}{} exit={}",
                 bytecode_value_summary(result), interpreter.get_errors_str(), interpreter.get_runtime_error(), interpreter.is_exit_requested());
         return ok;
     };
@@ -3109,11 +3109,11 @@ int main(int argc, char** argv)
         if (test())
         {
             ok++;
-            std::println("[PASS] {}. {} success", total, name);
+            fmt::println("[PASS] {}. {} success", total, name);
         }
         else
         {
-            std::println("[FAIL] {}. {} failed", total, name);
+            fmt::println("[FAIL] {}. {} failed", total, name);
         }
     };
 
@@ -3123,13 +3123,13 @@ int main(int argc, char** argv)
         if ((test_object.*test)())
         {
             ok++;
-            std::println("[PASS] {}. {} success", total, name);
+            fmt::println("[PASS] {}. {} success", total, name);
         }
-        else std::println("[FAIL] {}. {} failed", total, name);
+        else fmt::println("[FAIL] {}. {} failed", total, name);
     };
     #define RUN_CIFA(name) run_test(#name, direct, &CifaTests::name)
 
-    std::println("[Cifa tests]");
+    fmt::println("[Cifa tests]");
     run_direct_test("diagnostic_position_test", diagnostic_position_test);
     run_direct_test("direct_source_map_test", direct_source_map_test);
     run_direct_test("nested_ast_function_lookup_test", nested_ast_function_lookup_test);
@@ -3215,6 +3215,7 @@ int main(int argc, char** argv)
 
     #undef RUN_CIFA
 
-    std::println("Passed {} out of {} tests.", ok, total);
+    fmt::println("Passed {} out of {} tests.", ok, total);
     return ok == total ? 0 : 1;
 }
+

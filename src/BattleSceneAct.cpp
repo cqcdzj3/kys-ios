@@ -1,7 +1,11 @@
-#include "BattleSceneAct.h"
+﻿#include "BattleSceneAct.h"
+#include <fmt/format.h>
 #include "GameUtil.h"
+#include <fmt/format.h>
 #include "filefunc.h"
+#include <fmt/format.h>
 #include <limits>
+#include <fmt/format.h>
 
 namespace
 {
@@ -130,7 +134,7 @@ void BattleSceneAct::drawClassicPresentation()
     for (auto r : battle_roles_)
     {
         ClassicDrawInfo info;
-        info.path = std::format("fight/fight{:03}", r->HeadID);
+        info.path = fmt::format("fight/fight{:03}", r->HeadID);
         info.color = { 255, 255, 255, 255 };
         info.alpha = 255;
         info.white = 0;
@@ -430,17 +434,15 @@ void BattleSceneAct::setID(int id)
 
 void BattleSceneAct::drawPaperPresentation()
 {
-    //在这个模式下，使用的是直角坐标
-    Engine::getInstance()->setRenderTarget("scene");
+    //鍦ㄨ繖涓ā寮忎笅锛屼娇鐢ㄧ殑鏄洿瑙掑潗鏍?    Engine::getInstance()->setRenderTarget("scene");
     Engine::getInstance()->fillColor({ 0, 0, 0, 255 }, 0, 0, render_center_x_ * 2, render_center_y_ * 2);
 
-    //以下是计算出需要画的区域，先画到一个大图上，再转贴到窗口
-    {
+    //浠ヤ笅鏄绠楀嚭闇€瑕佺敾鐨勫尯鍩燂紝鍏堢敾鍒颁竴涓ぇ鍥句笂锛屽啀杞创鍒扮獥鍙?    {
         auto p = pos90To45(pos_.x, pos_.y);
         man_x_ = p.x;
         man_y_ = p.y;
     }
-    //一整块地面
+    //涓€鏁村潡鍦伴潰
     auto earth_texture = Engine::getInstance()->getTexture("earth");
     auto earth_texture2 = Engine::getInstance()->getTexture("earth2");
     if (earth_texture && earth_texture2)
@@ -468,7 +470,7 @@ void BattleSceneAct::drawPaperPresentation()
         //    }
         //}
 
-        //地面的z轴为0
+        //鍦伴潰鐨剒杞翠负0
 
         Engine::getInstance()->setRenderTarget(earth_texture2);
         Engine::getInstance()->fillColor({ 0, 0, 0, 0 }, 0, 0, COORD_COUNT * TILE_W * 2, COORD_COUNT * TILE_W * 2, BLENDMODE_NONE);
@@ -587,7 +589,7 @@ void BattleSceneAct::drawPaperPresentation()
                 {
                     r->FaceTowards = realTowardsToCameraFaceTowards(r->RealTowards, view_dir, paper_right, r->FaceTowards);
                 }
-                sprite.tex = TextureManager::getInstance()->getTexture(std::format("fight/fight{:03}", r->HeadID), calRolePic(r, r->ActType, r->ActFrame));
+                sprite.tex = TextureManager::getInstance()->getTexture(fmt::format("fight/fight{:03}", r->HeadID), calRolePic(r, r->ActType, r->ActFrame));
                 sprite.anchor = to_paper_anchor(r->Pos);
                 sprite.alpha = r->Attention ? 255 - r->Attention * 4 : 255;
                 sprite.turn = r->Dead ? 0 : 1;
@@ -684,7 +686,7 @@ void BattleSceneAct::drawPaperPresentation()
             int shadow = 0;
             uint8_t white = 0;
             int breathless = 0;
-            int draw_turn = 1;    //主要为了被击倒的画到后面
+            int draw_turn = 1;    //涓昏涓轰簡琚嚮鍊掔殑鐢诲埌鍚庨潰
         };
 
         std::vector<DrawInfo> draw_infos;
@@ -719,7 +721,7 @@ void BattleSceneAct::drawPaperPresentation()
         {
             //if (r->Dead) { continue; }
             DrawInfo info;
-            info.path = std::format("fight/fight{:03}", r->HeadID);
+            info.path = fmt::format("fight/fight{:03}", r->HeadID);
             info.color = { 255, 255, 255, 255 };
             info.alpha = 255;
             info.white = 0;
@@ -802,7 +804,7 @@ void BattleSceneAct::drawPaperPresentation()
                 {
                     info.shadow = 2;
                 }
-                info.alpha = 255 * (ae.TotalFrame * 1.25 - ae.Frame) / (ae.TotalFrame * 1.25);    //越来越透明
+                info.alpha = 255 * (ae.TotalFrame * 1.25 - ae.Frame) / (ae.TotalFrame * 1.25);    //瓒婃潵瓒婇€忔槑
                 draw_infos.emplace_back(std::move(info));
                 //TextureManager::getInstance()->renderTexture(ae.Path, ae.Frame % ae.TotalEffectFrame, ae.X1, ae.Y1 / 2, { 255, 255, 255, 255 }, 192);
             }
@@ -821,7 +823,7 @@ void BattleSceneAct::drawPaperPresentation()
         };
         std::sort(draw_infos.begin(), draw_infos.end(), sort_building);
 
-        //影子
+        //褰卞瓙
         for (auto& d : draw_infos)
         {
             if (d.shadow)
@@ -919,8 +921,7 @@ void BattleSceneAct::drawPaperPresentation()
         Engine::getInstance()->setColor(earth_texture, c);
         int w = render_center_x_ * 2;
         int h = render_center_y_ * 2;
-        //获取的是中心位置，如贴图应减掉屏幕尺寸的一半
-        Rect rect0 = { int(pos_.x - render_center_x_ - x_), int(pos_.y / 2 - render_center_y_ - y_), w, h };
+        //鑾峰彇鐨勬槸涓績浣嶇疆锛屽璐村浘搴斿噺鎺夊睆骞曞昂瀵哥殑涓€鍗?        Rect rect0 = { int(pos_.x - render_center_x_ - x_), int(pos_.y / 2 - render_center_y_ - y_), w, h };
         Rect rect1 = { 0, 0, w, h };
         if (rect0.x < 0)
         {
@@ -939,8 +940,7 @@ void BattleSceneAct::drawPaperPresentation()
         rect0.h = std::min(rect0.h, COORD_COUNT * TILE_H * 2 - rect0.y);
         rect1.w = rect0.w;
         rect1.h = rect0.h;
-        rect0.y -= 40;    //为了刀光在正中，往下调一点
-        for (auto& te : text_effects_)
+        rect0.y -= 40;    //涓轰簡鍒€鍏夊湪姝ｄ腑锛屽線涓嬭皟涓€鐐?        for (auto& te : text_effects_)
         {
             Font::getInstance()->draw(te.Text, te.Size, te.Pos.x, te.Pos.y / 2, te.color, 255);
         }
@@ -958,9 +958,8 @@ void BattleSceneAct::drawPaperPresentation()
 
     if (sword_light_)
     {
-        //刀光直接画在正中间
-        //20最大
-        int w = TextureManager::getInstance()->getTexture("title", 203)->w;
+        //鍒€鍏夌洿鎺ョ敾鍦ㄦ涓棿
+        //20鏈€澶?        int w = TextureManager::getInstance()->getTexture("title", 203)->w;
         int h = TextureManager::getInstance()->getTexture("title", 203)->h;
         double zoom_max = 1.0 * Engine::getInstance()->getUIWidth() / w;
         double zoom = zoom_max * sword_light_ / 20;
@@ -1014,3 +1013,4 @@ int BattleSceneAct::realTowardsToCameraFaceTowards(const Pointf& dir, const Poin
     if (right < 0 && forward < 0) { return Towards_LeftDown; }
     return Towards_None;
 }
+

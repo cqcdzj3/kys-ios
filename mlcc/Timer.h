@@ -2,7 +2,7 @@
 
 #include <chrono>
 #include <ctime>
-#include <format>
+#include <fmt/format.h>
 #include <string>
 
 class Timer
@@ -21,7 +21,7 @@ public:
         //        auto t = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
         //        auto t1 = std::chrono::current_zone()->to_local(t);
         //        auto fmt = "{:" + format + "}";
-        //        return std::vformat(fmt, std::make_format_args(t1));
+        //        return fmt::vformat(fmt, fmt::make_format_args(t1));
         //#else
         auto now = std::chrono::system_clock::now();
         auto t = std::chrono::system_clock::to_time_t(now);
@@ -37,7 +37,7 @@ public:
         if (with_ms)
         {
             auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
-            str += std::format(".{:03}", ms.count());
+            str += fmt::format(".{:03}", ms.count());
         }
         return str;
         //#endif
@@ -85,13 +85,13 @@ public:
         const auto seconds = remaining.count();
         if (hours.count() > 0)
         {
-            return std::format("{}:{:02}:{:05.2f}", hours.count(), minutes.count(), seconds);
+            return fmt::format("{}:{:02}:{:05.2f}", hours.count(), minutes.count(), seconds);
         }
         if (minutes.count() > 0)
         {
-            return std::format("{}:{:05.2f}", minutes.count(), seconds);
+            return fmt::format("{}:{:05.2f}", minutes.count(), seconds);
         }
-        return std::format("{:.2f} s", seconds);
+        return fmt::format("{:.2f} s", seconds);
     }
 
     static std::string formatTime(double s, const std::string& format_str = "{}:{:02}:{:05.2f}")
@@ -104,7 +104,7 @@ public:
         const auto hour_count = hours.count();
         const auto minute_count = minutes.count();
         const auto second_count = remaining.count();
-        return std::vformat(format_str, std::make_format_args(hour_count, minute_count, second_count));
+        return fmt::vformat(format_str, fmt::make_format_args(hour_count, minute_count, second_count));
     }
 
     static int64_t getNanoTime()
