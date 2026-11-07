@@ -1,4 +1,4 @@
-name: Build unsigned iOS IPA
+﻿name: Build unsigned iOS IPA
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-latest
     timeout-minutes: 120
 
     steps:
@@ -57,10 +57,8 @@ jobs:
           if [ -z "$APP" ]; then echo "kys.app not found"; exit 1; fi
           mkdir -p Payload
           cp -R "$APP" Payload/
-          # 确保 Info.plist 存在（CMake 未生成时兜底）
-          if [ ! -f Payload/kys.app/Info.plist ]; then cp ios/Info.plist Payload/kys.app/Info.plist; fi
-          # 游戏数据占位目录（后续由本地脚本填充）
-          mkdir -p Payload/kys.app/game
+          # 纭繚 Info.plist 瀛樺湪锛圕Make 鏈敓鎴愭椂鍏滃簳锛?          if [ ! -f Payload/kys.app/Info.plist ]; then cp ios/Info.plist Payload/kys.app/Info.plist; fi
+          # 娓告垙鏁版嵁鍗犱綅鐩綍锛堝悗缁敱鏈湴鑴氭湰濉厖锛?          mkdir -p Payload/kys.app/game
           zip -qry kys-unsigned.ipa Payload
           ls -lh kys-unsigned.ipa
 
@@ -76,3 +74,4 @@ jobs:
         with:
           name: build-log
           path: build.log
+
