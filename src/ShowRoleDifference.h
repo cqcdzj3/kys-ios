@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Font.h"
-#include <fmt/format.h>
+#include "fmt_compat.h"
 #include "GameUtil.h"
 #include "Head.h"
 #include "TextBox.h"
@@ -56,4 +56,3 @@ private:
     bool show_head_ = true;
     bool black_screen_ = true;
 };
-

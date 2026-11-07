@@ -1,6 +1,6 @@
 ﻿#include "BattleSceneHades.h"
-#include <fmt/format.h>
 #include "Audio.h"
+#include "fmt_compat.h"
 #include "Event.h"
 #include "Font.h"
 #include "GameUtil.h"
@@ -1733,4 +1733,3 @@ int BattleSceneHades::calRolePic(Role* r, int style, int frame)
 void BattleSceneHades::makeSpecialMagicEffect()
 {
 }
-

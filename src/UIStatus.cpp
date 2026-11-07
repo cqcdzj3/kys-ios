@@ -1,6 +1,6 @@
 ﻿#include "UIStatus.h"
-#include <fmt/format.h>
 #include "BattleMenu.h"
+#include "fmt_compat.h"
 #include "Engine.h"
 #include "Event.h"
 #include "Font.h"
@@ -499,4 +499,3 @@ void UIStatus::setExtentionVisible(bool b)
     }
     equip_item_->setVisible(b);
 }
-

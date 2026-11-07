@@ -1,8 +1,7 @@
 ﻿#include "BattleScene.h"
-#include <fmt/format.h>
 #include "Audio.h"
-#include "BattleNetwork.h"
-#include <fmt/format.h>    //必须在Audio之前
+#include "fmt_compat.h"
+#include "BattleNetwork.h"    //必须在Audio之前
 #include "DrawableOnCall.h"
 #include "Event.h"
 #include "Font.h"
@@ -3547,4 +3546,3 @@ void BattleScene::makeEarthTexture()
     }
     Engine::getInstance()->resetRenderTarget();
 }
-

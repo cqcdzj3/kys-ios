@@ -1,11 +1,11 @@
-﻿#include "DayNightSystem.h"
+#include "DayNightSystem.h"
 
 #include "GameUtil.h"
 #include "Random.h"
 
 #include <algorithm>
 #include <cmath>
-#include <fmt/format.h>
+#include "fmt_compat.h"
 
 namespace
 {
@@ -112,22 +112,22 @@ std::string DayNightSystem::getTimeLabel() const
 {
     float time = time_of_day_ < 0.0f ? 0.5f : time_of_day_;
     int minutes = int(time * 24.0f * 60.0f) % (24 * 60);
-    const char* period = "娣卞";
+    const char* period = "深夜";
     if (time >= 0.20f && time < 0.30f)
     {
-        period = "榛庢槑";
+        period = "黎明";
     }
     else if (time >= 0.30f && time < 0.70f)
     {
-        period = "鐧藉ぉ";
+        period = "白天";
     }
     else if (time >= 0.70f && time < 0.80f)
     {
-        period = "榛勬槒";
+        period = "黄昏";
     }
     else if (time >= 0.80f || time < 0.20f)
     {
-        period = "澶滄櫄";
+        period = "夜晚";
     }
     return fmt::format("{} {:02}:{:02}", period, minutes / 60, minutes % 60);
 }

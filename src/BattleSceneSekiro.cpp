@@ -1,6 +1,6 @@
 ﻿#include "BattleSceneSekiro.h"
-#include <fmt/format.h>
 #include "Audio.h"
+#include "fmt_compat.h"
 #include "Event.h"
 #include "GameUtil.h"
 #include "MainScene.h"
@@ -1755,4 +1755,3 @@ int BattleSceneSekiro::calRolePic(Role* r, int style, int frame)
     }
     return r->FaceTowards;
 }
-

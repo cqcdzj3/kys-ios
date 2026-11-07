@@ -1,6 +1,6 @@
 ﻿#include "BattleMenu.h"
-#include <fmt/format.h>
 #include "BattleScene.h"
+#include "fmt_compat.h"
 #include "Event.h"
 #include "Font.h"
 #include "PotConv.h"
@@ -710,4 +710,3 @@ std::vector<Item*> BattleItemMenu::getAvaliableItems(Role* role, int type)
     item_menu.setForceItemType({type});
     return item_menu.getAvaliableItems();
 }
-

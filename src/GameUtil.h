@@ -1,9 +1,7 @@
 ﻿#pragma once
 #include "INIReader.h"
-#include <fmt/format.h>
-#include <fmt/ranges.h>
-#include "runtime_format.h"
-#include <fmt/ranges.h>    //支持std::format的运行时格式化，c++26前暂时凑合用
+#include "fmt_compat.h"
+#include "runtime_format.h"    //支持std::format的运行时格式化，c++26前暂时凑合用
 #include <cmath>
 #include <cstdint>
 #include "filefunc.h"
@@ -115,6 +113,3 @@ void LOG(fmt::format_string<Args...> fmt, Args... args)
     auto str = fmt::format(fmt, std::forward<Args>(args)...);
     fputs(str.c_str(), stdout);
 }
-
-
-

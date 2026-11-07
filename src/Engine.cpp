@@ -1,7 +1,7 @@
 ﻿#include "Engine.h"
-#include <fmt/format.h>
 
 #include "GameUtil.h"
+#include "fmt_compat.h"
 #include "SDL3_image/SDL_image.h"
 #include "UIRenderer.h"
 #include "strfunc.h"
@@ -1467,6 +1467,3 @@ int Engine::saveTexture(Texture* tex, const char* filename) const
     resetRenderTarget();
     return 0;
 }
-
-
-

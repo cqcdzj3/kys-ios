@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <cstdio>
 #include <numeric>
-#include <fmt/format.h>
+#include "fmt_compat.h"
 #include "test_process.h"
 
 using namespace cifa;
@@ -3218,4 +3218,3 @@ int main(int argc, char** argv)
     fmt::println("Passed {} out of {} tests.", ok, total);
     return ok == total ? 0 : 1;
 }
-

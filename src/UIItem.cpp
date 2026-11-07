@@ -1,6 +1,6 @@
 ﻿#include "UIItem.h"
-#include <fmt/format.h>
 #include "Event.h"
+#include "fmt_compat.h"
 #include "Font.h"
 #include "GameUtil.h"
 #include "MainScene.h"
@@ -749,4 +749,3 @@ void UIItem::onPressedCancel()
     current_item_ = nullptr;
     exitWithResult(-1);
 }
-

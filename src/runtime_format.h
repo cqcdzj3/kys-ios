@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <fmt/format.h>
+#include "fmt_compat.h"
 #include <string>
 
 // 运行时格式串包装（std::vformat 的 fmt 等价物）

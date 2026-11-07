@@ -1,6 +1,6 @@
 ﻿#include "UISave.h"
-#include <fmt/format.h>
 #include "Event.h"
+#include "fmt_compat.h"
 #include "MainScene.h"
 #include "Save.h"
 #include "SubScene.h"
@@ -126,4 +126,3 @@ void UISave::save(int r)
     }
     save->save(r);
 }
-

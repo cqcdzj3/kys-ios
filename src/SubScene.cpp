@@ -13,7 +13,7 @@
 #include "Timer.h"
 #include "UI.h"
 #include "Weather.h"
-#include <fmt/format.h>
+#include "fmt_compat.h"
 #include <cmath>
 #include <algorithm>
 
@@ -745,4 +745,3 @@ void SubScene::walkScriptStep(int x, int y)
     } while (walking_);
     walk_next_started_ = -1;
 }
-

@@ -1,6 +1,6 @@
 ﻿#include "RunNode.h"
-#include <fmt/format.h>
 #include "McpServer.h"
+#include "fmt_compat.h"
 #include "Audio.h"
 #include "Font.h"
 #include "GameUtil.h"
@@ -670,4 +670,3 @@ int RunNode::drawAndPresent(int times, std::function<void(void*)> func, void* da
     }
     return times;
 }
-

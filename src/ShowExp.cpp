@@ -1,6 +1,6 @@
 ﻿#include "ShowExp.h"
-#include <fmt/format.h>
 #include "Engine.h"
+#include "fmt_compat.h"
 #include "Font.h"
 #include "TextureManager.h"
 
@@ -75,4 +75,3 @@ void ShowExp::draw()
         Font::getInstance()->draw(fmt::format("{}", r->ExpGot), 20, x + 90, y + 55, { 255, 255, 255, 255 });
     }
 }
-

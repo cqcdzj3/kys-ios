@@ -1,6 +1,6 @@
 ﻿#include "Audio.h"
-#include <fmt/format.h>
 #include "Engine.h"
+#include "fmt_compat.h"
 #include "GameUtil.h"
 #include "filefunc.h"
 
@@ -240,4 +240,3 @@ void Audio::playWav(WAV w, int volume, int track_num)
         current_track_num_ = 0;
     }
 }
-

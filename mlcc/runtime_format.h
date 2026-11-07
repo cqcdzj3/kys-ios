@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include <fmt/format.h>
-#include <print>
+#include "fmt_compat.h"
 
 namespace std
 {
@@ -32,4 +31,3 @@ void print(const runtime_format& rfmt, Args&&... args)
     print(stdout, rfmt, std::forward<Args>(args)...);
 }
 }    //namespace std
-

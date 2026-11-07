@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <deque>
-#include <fmt/format.h>
+#include "fmt_compat.h"
 
 #include "BattleScene.h"
 #include "Camera.h"
@@ -203,4 +203,3 @@ protected:
     PaperPresentation paper_presentation_;
     Camera camera_;
 };
-

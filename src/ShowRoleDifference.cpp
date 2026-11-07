@@ -1,6 +1,6 @@
 ﻿#include "ShowRoleDifference.h"
-#include <fmt/format.h>
 #include "Font.h"
+#include "fmt_compat.h"
 #include "Save.h"
 
 ShowRoleDifference::ShowRoleDifference()
@@ -113,4 +113,3 @@ void ShowRoleDifference::draw()
     //showOneDifference(role1_->Level, "御劍 {:9}     -> {:9}", 20, color, x, y);
     TextBox::draw();
 }
-

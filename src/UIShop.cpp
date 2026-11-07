@@ -1,6 +1,6 @@
 ﻿#include "UIShop.h"
-#include <fmt/format.h>
 #include "Event.h"
+#include "fmt_compat.h"
 #include "Font.h"
 #include "PotConv.h"
 #include "Save.h"
@@ -212,4 +212,3 @@ int UIShop::calNeedMoney()
     }
     return need_money;
 }
-

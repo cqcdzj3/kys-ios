@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <cmath>
 #include <deque>
-#include <fmt/format.h>
+#include "fmt_compat.h"
 #include <functional>
 #include <list>
 #include <map>
@@ -22,38 +22,6 @@
 #include <vector>
 #include <version>
 
-#if __has_include(<print>) && !defined(CIFA_NO_STD_PRINT)
-#else
-namespace std
-{
-template <typename... Args>
-void print(FILE* stream, format_string<Args...> fmt, Args&&... args)
-{
-    const auto text = format(fmt, std::forward<Args>(args)...);
-    std::fwrite(text.data(), 1, text.size(), stream);
-}
-
-template <typename... Args>
-void print(format_string<Args...> fmt, Args&&... args)
-{
-    print(stdout, fmt, std::forward<Args>(args)...);
-}
-
-template <typename... Args>
-void println(FILE* stream, format_string<Args...> fmt, Args&&... args)
-{
-    print(stream, fmt, std::forward<Args>(args)...);
-    std::fputc('\n', stream);
-}
-
-template <typename... Args>
-void println(format_string<Args...> fmt, Args&&... args)
-{
-    print(fmt, std::forward<Args>(args)...);
-    std::puts("");
-}
-}
-#endif
 
 namespace cifa
 {
@@ -843,6 +811,3 @@ private:
 };
 
 }    // namespace cifa
-
-
-

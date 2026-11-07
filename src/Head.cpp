@@ -1,6 +1,6 @@
 ﻿#include "Head.h"
-#include <fmt/format.h>
 #include "Font.h"
+#include "fmt_compat.h"
 #include "GameUtil.h"
 #include "Save.h"
 #include "TextureManager.h"
@@ -196,4 +196,3 @@ void Head::draw()
     MP_ = std::max(MP_ - 1 - role_->MaxMP / 1000, role_->MP);
     PhysicalPower_ = std::max(PhysicalPower_ - 1, role_->PhysicalPower);
 }
-

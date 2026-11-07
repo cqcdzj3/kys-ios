@@ -1,6 +1,6 @@
 ﻿#include "Save.h"
-#include <fmt/format.h>
 #include "GameUtil.h"
+#include "fmt_compat.h"
 #include "GrpIdxFile.h"
 #include "NewSave.h"
 #include "PotConv.h"
@@ -487,4 +487,3 @@ void Save::runSql(const std::string& cmd)
             [&]() { NewSave::LoadDBShopSave(db, shops_mem_); }, true);
     }
 }
-

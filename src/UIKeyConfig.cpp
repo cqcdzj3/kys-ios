@@ -1,7 +1,7 @@
 ﻿#include "UIKeyConfig.h"
-#include <fmt/format.h>
 
 #include "Button.h"
+#include "fmt_compat.h"
 #include "INIReader.h"
 #include "strfunc.h"
 #include "GameUtil.h"
@@ -96,4 +96,3 @@ std::string UIKeyConfig::keyToString(int k)
     str[1] = char(k);
     return str;
 }
-

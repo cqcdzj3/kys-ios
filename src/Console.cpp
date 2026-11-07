@@ -1,6 +1,6 @@
 ﻿#include "Console.h"
-#include <fmt/format.h>
 #include "BattleNetwork.h"
+#include "fmt_compat.h"
 #include "BattleScene.h"
 #include "DrawableOnCall.h"
 #include "Event.h"
@@ -259,4 +259,3 @@ Console::Console()
         //Save::getInstance()->load(11);
     }
 }
-

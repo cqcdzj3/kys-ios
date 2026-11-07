@@ -2,7 +2,7 @@
 
 #include <chrono>
 #include <ctime>
-#include <fmt/format.h>
+#include "fmt_compat.h"
 #include <string>
 
 class Timer

@@ -1,6 +1,6 @@
 ﻿#include "Event.h"
-#include <fmt/format.h>
 #include "Audio.h"
+#include "fmt_compat.h"
 #include "BattleScene.h"
 #include "BattleSceneHades.h"
 #include "BattleSceneSekiro.h"
@@ -1720,4 +1720,3 @@ void Event::instruct_50e(int code, int e1, int e2, int e3, int e4, int e5, int e
     default: break;
     }
 }
-

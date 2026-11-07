@@ -1,6 +1,6 @@
 ﻿#include "Cifa.h"
-#include <fmt/format.h>
 #include <algorithm>
+#include "fmt_compat.h"
 #include <bit>
 #include <cerrno>
 #include <cstdlib>
@@ -4781,6 +4781,3 @@ void Cifa::print_runtime_error() const
     fmt::print(stderr, "{}", format_runtime_error());
 }
 }    // namespace cifa
-
-
-

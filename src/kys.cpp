@@ -1,4 +1,4 @@
-#include "Application.h"
+﻿#include "Application.h"
 #include "Engine.h"
 #include "GameUtil.h"
 #include "McpServer.h"
@@ -76,4 +76,3 @@ int main(int argc, char* argv[])
     Application app;
     return app.run();
 }
-
