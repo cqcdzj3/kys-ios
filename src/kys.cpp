@@ -110,6 +110,10 @@ int main(int argc, char* argv[])
             };
             replace_value("battle_mode = ", "0");
             replace_value("battle_presentation = ", "0");
+
+            // the PTT data pack ships VOLUME = 0 / VOLUMEWAV = 0 (silent)
+            replace_value("VOLUME = ", "50");
+            replace_value("VOLUMEWAV = ", "60");
             std::ofstream bout(cfg, std::ios::trunc);
             bout << btext;
             bout.close();
