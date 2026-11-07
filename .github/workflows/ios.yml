@@ -66,7 +66,7 @@ jobs:
       - name: Build
         run: |
           set -euxo pipefail
-          cmake --build build-ios --config Release -j 4 2>&1 | tee build.log
+          cmake --build build-ios --config Release -j 4 2>&1 | tee -a build.log
 
       - name: Show build log tail
         if: always()
