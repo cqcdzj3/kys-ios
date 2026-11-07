@@ -620,7 +620,7 @@ void UIItem::addOneProperty(const std::string& format_str, int v)
 {
     if (v != 0)
     {
-        properties_.push_back(fmt::format(std::runtime_format(format_str), v));
+        properties_.push_back(format(runtime_format(format_str), v));
     }
 }
 
@@ -718,7 +718,7 @@ void UIItem::onPressedOK()
                 {
                     format_str = "誰要裝備{}";
                 }
-                team_menu->setText(fmt::format(std::runtime_format(format_str), current_item_->Name));
+                team_menu->setText(format(runtime_format(format_str), current_item_->Name));
                 team_menu->run();
                 role = team_menu->getRole();
             }
