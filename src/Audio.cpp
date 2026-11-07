@@ -55,8 +55,14 @@ void Audio::init()
     //SDL_setenv_unsafe("TIMIDITY_CFG", timi_path.c_str(), true);
     for (int i = 0; i < 100; i++)
     {
+        // 优先使用预渲染的 wav（iOS 上没有 fluidsynth，无法播放 midi）
+        auto wav_path = fmt::format("{}music/{}.wav", GameUtil::PATH(), i);
         music_path = fmt::format("{}music/{}.mid", GameUtil::PATH(), i);
-        if (filefunc::fileExist(music_path))
+        if (filefunc::fileExist(wav_path))
+        {
+            music_.push_back(loadMusic(wav_path));
+        }
+        else if (filefunc::fileExist(music_path))
         {
             music_.push_back(loadMusic(music_path));
         }
