@@ -1,4 +1,5 @@
 ﻿#include "Audio.h"
+#include <fstream>
 #include "Engine.h"
 #include "fmt_compat.h"
 #include "GameUtil.h"
@@ -53,11 +54,18 @@ void Audio::init()
     auto timi_path = fmt::format("{}music/timidity.cfg", GameUtil::PATH());
     //SDL_SetEnvironmentVariable(SDL_GetEnvironment(), "TIMIDITY_CFG", timi_path.c_str(), true);
     //SDL_setenv_unsafe("TIMIDITY_CFG", timi_path.c_str(), true);
+#if defined(KYS_IOS)
+    std::ofstream audio_log(GameUtil::PATH() + "audio_debug.log", std::ios::trunc);
+    audio_log << "PATH=" << GameUtil::PATH() << "\n";
+#endif
     for (int i = 0; i < 100; i++)
     {
         // 优先使用预渲染的 wav（iOS 上没有 fluidsynth，无法播放 midi）
         auto wav_path = fmt::format("{}music/{}.wav", GameUtil::PATH(), i);
         music_path = fmt::format("{}music/{}.mid", GameUtil::PATH(), i);
+#if defined(KYS_IOS)
+        audio_log << i << " wav=" << filefunc::fileExist(wav_path) << " mid=" << filefunc::fileExist(music_path) << "\n";
+#endif
         if (filefunc::fileExist(wav_path))
         {
             music_.push_back(loadMusic(wav_path));
