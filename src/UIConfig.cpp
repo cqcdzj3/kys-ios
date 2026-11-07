@@ -41,7 +41,7 @@ UIConfig::UIConfig()
     addOption("直接勝利", "game", "battle_debug_win", { "關閉", "開啟" });
     addOption("文字顯示", "game", "simplified_chinese", { "繁體", "簡體" });
     addOption("手柄震動", "game", "controller_rumble", { "關閉", "開啟" });
-    addOption("虛擬手柄", "game", "use_virtual_stick", { "關閉", "開啟" });
+    addOption("操作模式", "game", "use_virtual_stick", { "觸控", "虛擬按鍵" });
     addOption("動態晝夜", "game", "dynamic_day_night", { "關閉", "開啟" });
     addOption("貼圖左上高光", "game", "texture_top_left_highlight", { "關閉", "開啟" });
     addOption("全屏", "game", "fullscreen", { "關閉", "開啟" });
