@@ -1,0 +1,12 @@
+﻿name: ci-probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "hello from ubuntu runner"
+      - run: uname -a
