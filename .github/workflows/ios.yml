@@ -39,7 +39,8 @@ jobs:
           "$VCPKG_ROOT/vcpkg" install \
             sdl3 sdl3-ttf "sdl3-image[core,png]" "sdl3-mixer[core]" \
             sqlite3 yaml-cpp glaze asio picosha2 libiconv fmt \
-            --triplet arm64-ios
+            --triplet arm64-ios \
+            --overlay-triplets="$GITHUB_WORKSPACE/vcpkg-triplets"
           echo "--- installed libs ---"
           ls -1 "$VCPKG_ROOT/installed/arm64-ios/lib" | head -60 || true
 
