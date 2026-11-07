@@ -120,6 +120,12 @@ int Engine::init(void* handle /*= nullptr*/, int handle_type /*= 0*/, int maximi
 #ifndef _WINDLL
     if (!SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_SENSOR))
     {
+#if defined(KYS_IOS)
+        {
+            std::ofstream sdl_log(GameUtil::PATH() + "audio_debug.log", std::ios::app);
+            sdl_log << "SDL_Init failed err=" << SDL_GetError() << "\n";
+        }
+#endif
         return -1;
     }
 #endif

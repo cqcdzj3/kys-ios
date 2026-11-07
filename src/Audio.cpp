@@ -56,8 +56,24 @@ void Audio::init()
     //SDL_setenv_unsafe("TIMIDITY_CFG", timi_path.c_str(), true);
 #if defined(KYS_IOS)
     std::ofstream audio_log(GameUtil::PATH() + "audio_debug.log", std::ios::trunc);
-    audio_log << "BUILD=36 PATH=" << GameUtil::PATH() << "\n";
+    audio_log << "BUILD=37 PATH=" << GameUtil::PATH() << "\n";
+    audio_log << "init mixer=" << (mixer_ != nullptr) << " err=" << SDL_GetError() << "\n";
 #endif
+    // the Audio singleton may be constructed before SDL_Init(SDL_INIT_AUDIO);
+    // in that case MIX_CreateMixerDevice failed and everything stays silent
+    if (mixer_ == nullptr)
+    {
+        MIX_Init();
+        SDL_AudioSpec retry_spec;
+        retry_spec.freq = 22500;
+        retry_spec.format = SDL_AUDIO_S16;
+        retry_spec.channels = 2;
+        mixer_ = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &retry_spec);
+        track_music_ = MIX_CreateTrack(mixer_);
+#if defined(KYS_IOS)
+        audio_log << "retry mixer=" << (mixer_ != nullptr) << " err=" << SDL_GetError() << "\n";
+#endif
+    }
     for (int i = 0; i < 100; i++)
     {
         // 优先使用预渲染的 wav（iOS 上没有 fluidsynth，无法播放 midi）
