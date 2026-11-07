@@ -4781,3 +4781,9 @@ void Cifa::print_runtime_error() const
     fmt::print(stderr, "{}", format_runtime_error());
 }
 }    // namespace cifa
+
+namespace cifa
+{
+// single definition (clang rejects the duplicate TLS init routine emitted for an inline variable)
+thread_local std::vector<std::function<void(const std::string&, const Object*)>> Object::runtime_error_reporters;
+}    // namespace cifa

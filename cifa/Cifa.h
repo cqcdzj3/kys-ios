@@ -337,7 +337,7 @@ private:
         }
     }
 
-    inline static thread_local std::vector<std::function<void(const std::string&, const Object*)>> runtime_error_reporters;
+    static thread_local std::vector<std::function<void(const std::string&, const Object*)>> runtime_error_reporters;
 
     std::any value;
     std::type_index bound_type = typeid(void);
