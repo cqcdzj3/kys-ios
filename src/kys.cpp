@@ -89,6 +89,37 @@ int main(int argc, char* argv[])
             f << "1";
             f.close();
         }
+
+        // one-time migration: the cpp data packs default to the new action
+        // battle systems; restore the original turn-based battle
+        auto bflag = std::filesystem::path(dst) / "config" / "kys_battle_migrate";
+        if (std::filesystem::exists(cfg, mec) && !std::filesystem::exists(bflag, mec))
+        {
+            std::ifstream bin(cfg);
+            std::string btext((std::istreambuf_iterator<char>(bin)), std::istreambuf_iterator<char>());
+            bin.close();
+            auto replace_value = [&btext](const std::string& key, const std::string& value) {
+                auto pos = btext.find(key);
+                if (pos == std::string::npos)
+                {
+                    return;
+                }
+                auto line_end = btext.find('\n', pos);
+                if (line_end == std::string::npos)
+                {
+                    line_end = btext.size();
+                }
+                btext.replace(pos, line_end - pos, key + value);
+            };
+            replace_value("battle_mode = ", "0");
+            replace_value("battle_presentation = ", "0");
+            std::ofstream bout(cfg, std::ios::trunc);
+            bout << btext;
+            bout.close();
+            std::ofstream bf(bflag);
+            bf << "1";
+            bf.close();
+        }
     }
 #endif
     if (!path.empty())
