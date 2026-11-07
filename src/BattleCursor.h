@@ -12,7 +12,7 @@ class BattleCursor : public RunNode
 {
 
     // 手柄/虚拟按键的重复速度（避免一按就飞过整张地图）
-    static constexpr double pad_move_delay_ = 150;
+    static constexpr double pad_move_delay_ = 90;
     double last_pad_move_ticks_ = 0;
 public:
     BattleCursor(BattleScene* b);
