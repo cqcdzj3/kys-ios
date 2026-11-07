@@ -63,7 +63,7 @@ file(GLOB SRC_LIST
 
 # 静态库（vcpkg arm64-ios 提供 <name>.a / lib<name>.a）
 set(LINK_LIBS "")
-foreach(lib sdl3 SDL3 SDL3_ttf SDL3_image SDL3_mixer sqlite3 yaml-cpp iconv fmt freetype png16 z)
+foreach(lib sdl3 SDL3 SDL3_ttf SDL3_image SDL3_mixer sqlite3 yaml-cpp iconv fmt freetype png16 z brotlidec brotlicommon bz2)
   find_library(${lib}_LIB
       NAMES ${lib} lib${lib}
       PATHS ${VCPKG_LIB}
