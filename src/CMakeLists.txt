@@ -16,7 +16,7 @@ set(CMAKE_OBJCXX_STANDARD 17)
 
 if(KYS_IOS)
   set(CMAKE_OSX_ARCHITECTURES arm64 CACHE STRING "" FORCE)
-  set(CMAKE_OSX_DEPLOYMENT_TARGET "16.4" CACHE STRING "" FORCE)
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0" CACHE STRING "" FORCE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -DNDEBUG -fvisibility=hidden")
   add_definitions(-DKYS_IOS=1)
 elseif(APPLE)
@@ -112,4 +112,5 @@ else()
 endif()
 
 target_link_libraries(kys ${LINK_LIBS})
+
 

@@ -1,4 +1,5 @@
 ﻿#include "Cifa.h"
+#include "CifaFormat.h"
 #include <algorithm>
 #include <bit>
 #include <cerrno>
@@ -108,7 +109,7 @@ static std::string object_to_display_string(const Object& value)
 {
     if (value.isType<bool>()) { return value.toBool() ? "true" : "false"; }
     if (value.isInteger()) { return std::format("{}", value.toInt64()); }
-    if (value.isType<double>()) { return std::format("{}", value.toDouble()); }
+    if (value.isType<double>()) { return cifa_fmt::shortest(value.toDouble()); }
     if (value.isType<std::string>()) { return value.toString(); }
     return {};
 }
@@ -474,7 +475,7 @@ Cifa::Cifa()
                 {
                     return arg.toBool() ? "true" : "false";
                 }
-                return std::format("{}", arg.toDouble());
+                return cifa_fmt::shortest(arg.toDouble());
             }
             std::string s = arg.toString();
             return std::format("{}", s);
@@ -492,7 +493,7 @@ Cifa::Cifa()
             return std::vformat(fmt_str, std::make_format_args(iv));
         }
         double dv = arg.toDouble();
-        return std::vformat(fmt_str, std::make_format_args(dv));
+        return cifa_fmt::with_spec(fspec, dv);
     };
     register_function("format", [format_sub](ObjectVector& x) -> Object
         {
@@ -4780,3 +4781,4 @@ void Cifa::print_runtime_error() const
     std::print(stderr, "{}", format_runtime_error());
 }
 }    // namespace cifa
+

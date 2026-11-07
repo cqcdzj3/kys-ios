@@ -23,7 +23,7 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>MinimumOSVersion</key>
-    <string>16.4</string>
+    <string>14.0</string>
     <key>UIDeviceFamily</key>
     <array>
         <integer>1</integer>
@@ -57,4 +57,5 @@
     <true/>
 </dict>
 </plist>
+
 
