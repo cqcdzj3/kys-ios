@@ -22,7 +22,7 @@
 #include <vector>
 #include <version>
 
-#ifdef __cpp_lib_print
+#if __has_include(<print>) && !defined(CIFA_NO_STD_PRINT)
 #include <print>
 #else
 namespace std
@@ -844,3 +844,4 @@ private:
 };
 
 }    // namespace cifa
+
