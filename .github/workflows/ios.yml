@@ -1,4 +1,4 @@
-﻿name: Build unsigned iOS IPA
+name: Build unsigned iOS IPA
 
 on:
   workflow_dispatch:
@@ -7,7 +7,6 @@ on:
 
 env:
   VCPKG_ROOT: ${{ github.workspace }}/vcpkg
-  VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
 
 jobs:
   build:
@@ -31,13 +30,17 @@ jobs:
 
       - name: Install dependencies for arm64-ios
         run: |
+          set -euxo pipefail
           "$VCPKG_ROOT/vcpkg" install \
             sdl3 sdl3-ttf "sdl3-image[core,png]" "sdl3-mixer[core]" \
             sqlite3 yaml-cpp glaze asio picosha2 libiconv \
             --triplet arm64-ios
+          echo "--- installed libs ---"
+          ls -1 "$VCPKG_ROOT/installed/arm64-ios/lib" | head -60 || true
 
       - name: Configure
         run: |
+          set -euxo pipefail
           cmake -S src -B build-ios \
             -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
             -DVCPKG_TARGET_TRIPLET=arm64-ios \
@@ -47,18 +50,32 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: cmake --build build-ios --config Release -j 4 2>&1 | tee build.log
+        run: |
+          set -euxo pipefail
+          cmake --build build-ios --config Release -j 4 2>&1 | tee build.log
+
+      - name: Show build log tail
+        if: always()
+        run: |
+          echo "===== build.log (last 250 lines) ====="
+          tail -n 250 build.log || echo "(no build.log)"
+          echo "===== artifacts on disk ====="
+          find build-ios -maxdepth 4 -name "kys*" | head -20 || true
+          find build-ios -name "*.app" -maxdepth 4 | head -5 || true
 
       - name: Package unsigned IPA
         run: |
-          set -e
-          APP=$(find build-ios -maxdepth 3 -name "kys.app" -type d | head -n 1)
+          set -euxo pipefail
+          APP=$(find build-ios -maxdepth 4 -name "kys.app" -type d | head -n 1)
           echo "APP=$APP"
-          if [ -z "$APP" ]; then echo "kys.app not found"; exit 1; fi
+          if [ -z "$APP" ]; then echo "::error::kys.app not found"; exit 1; fi
+          ls -la "$APP"
+          if [ ! -f "$APP/kys" ]; then echo "::error::bundle has no executable"; exit 1; fi
+          file "$APP/kys"
           mkdir -p Payload
           cp -R "$APP" Payload/
-          # 纭繚 Info.plist 瀛樺湪锛圕Make 鏈敓鎴愭椂鍏滃簳锛?          if [ ! -f Payload/kys.app/Info.plist ]; then cp ios/Info.plist Payload/kys.app/Info.plist; fi
-          # 娓告垙鏁版嵁鍗犱綅鐩綍锛堝悗缁敱鏈湴鑴氭湰濉厖锛?          mkdir -p Payload/kys.app/game
+          if [ ! -f Payload/kys.app/Info.plist ]; then cp ios/Info.plist Payload/kys.app/Info.plist; fi
+          mkdir -p Payload/kys.app/game
           zip -qry kys-unsigned.ipa Payload
           ls -lh kys-unsigned.ipa
 
@@ -67,6 +84,7 @@ jobs:
         with:
           name: kys-unsigned-ipa
           path: kys-unsigned.ipa
+          if-no-files-found: error
 
       - name: Upload build log
         if: always()
@@ -74,4 +92,4 @@ jobs:
         with:
           name: build-log
           path: build.log
-
+          if-no-files-found: warn
