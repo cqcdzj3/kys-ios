@@ -37,7 +37,7 @@ jobs:
           path: |
             ${{ env.VCPKG_ROOT }}/installed
             ${{ env.VCPKG_ROOT }}/packages
-          key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg-triplets/arm64-ios.cmake') }}-v4
+          key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg-triplets/arm64-ios.cmake') }}-v5
 
       - name: Install dependencies for arm64-ios
         env:
@@ -45,7 +45,7 @@ jobs:
         run: |
           set -euxo pipefail
           "$VCPKG_ROOT/vcpkg" install \
-            sdl3 sdl3-ttf "sdl3-image[core,png]" "sdl3-mixer[core,fluidsynth]" \
+            sdl3 sdl3-ttf "sdl3-image[core,png]" "sdl3-mixer[core]" \
             sqlite3 yaml-cpp glaze asio picosha2 libiconv fmt \
             --triplet arm64-ios \
             --overlay-triplets="$GITHUB_WORKSPACE/vcpkg-triplets" 2>&1 | tee -a build.log
