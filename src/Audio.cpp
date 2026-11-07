@@ -1,4 +1,4 @@
-﻿#include "Audio.h"
+#include "Audio.h"
 #include <fstream>
 #include "Engine.h"
 #include "fmt_compat.h"
@@ -68,7 +68,11 @@ void Audio::init()
 #endif
         if (filefunc::fileExist(wav_path))
         {
-            music_.push_back(loadMusic(wav_path));
+            auto m = loadMusic(wav_path);
+            music_.push_back(m);
+#if defined(KYS_IOS)
+            audio_log << i << " loaded=" << (m != nullptr) << " err=" << SDL_GetError() << "\n";
+#endif
         }
         else if (filefunc::fileExist(music_path))
         {
@@ -90,6 +94,13 @@ void Audio::init()
 
 void Audio::playMusic(int num)
 {
+#if defined(KYS_IOS)
+    {
+        std::ofstream play_log(GameUtil::PATH() + "audio_debug.log", std::ios::app);
+        play_log << "play " << num << " size=" << music_.size()
+                 << " valid=" << (num >= 0 && num < (int)music_.size() && music_[num] != nullptr) << "\n";
+    }
+#endif
     if (num < 0 || num >= music_.size() || music_[num] == 0)
     {
         return;
