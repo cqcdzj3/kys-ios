@@ -1,4 +1,4 @@
-name: Build unsigned iOS IPA
+﻿name: Build unsigned iOS IPA
 
 on:
   workflow_dispatch:
@@ -7,6 +7,9 @@ on:
 
 env:
   VCPKG_ROOT: ${{ github.workspace }}/vcpkg
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -93,3 +96,12 @@ jobs:
           name: build-log
           path: build.log
           if-no-files-found: warn
+
+      - name: Publish logs to release
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view ci-latest >/dev/null 2>&1 || gh release create ci-latest --title "CI latest" --notes "auto-published build log" || true
+          if [ -f build.log ]; then gh release upload ci-latest build.log --clobber || true; fi
+          if [ -f kys-unsigned.ipa ]; then gh release upload ci-latest kys-unsigned.ipa --clobber || true; fi
