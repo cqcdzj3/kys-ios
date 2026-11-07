@@ -31,6 +31,14 @@ jobs:
           git clone --depth 1 https://github.com/microsoft/vcpkg.git "$VCPKG_ROOT"
           "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics
 
+      - name: Cache vcpkg artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.VCPKG_ROOT }}/installed
+            ${{ env.VCPKG_ROOT }}/packages
+          key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg-triplets/arm64-ios.cmake') }}-v2
+
       - name: Install dependencies for arm64-ios
         env:
           VCPKG_OSX_DEPLOYMENT_TARGET: "14.0"

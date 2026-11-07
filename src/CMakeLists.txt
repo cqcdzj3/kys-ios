@@ -115,4 +115,10 @@ else()
   add_executable(kys ${SRC_LIST})
 endif()
 
+if(KYS_IOS)
+  # SDL3 references a UIKit constant introduced in iOS 16; mark it as an allowed
+  # undefined symbol so dyld can load the binary on iOS 14.
+  target_link_options(kys PRIVATE "-Wl,-U,_UIWindowSceneSessionRoleExternalDisplayNonInteractive")
+endif()
+
 target_link_libraries(kys ${LINK_LIBS})
