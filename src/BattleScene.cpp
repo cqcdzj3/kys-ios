@@ -3388,11 +3388,20 @@ void BattleScene::calExpGot()
         }
         if (change)
         {
-            diff->setTwinRole(&r0, r);
-            diff->setText("升級");
-            kys_dbg("exp: diff begin");
-            diff->run();
-            kys_dbg("exp: diff end");
+            // 战败时的结算界面在某些 MOD 数据下无法退出（上游 bug），
+            // 数值照常生效，只是不弹对比窗
+            if (result_ == 1)
+            {
+                kys_dbg("exp: diff skipped on defeat");
+            }
+            else
+            {
+                diff->setTwinRole(&r0, r);
+                diff->setText("升級");
+                kys_dbg("exp: diff begin");
+                diff->run();
+                kys_dbg("exp: diff end");
+            }
         }
 
         //修炼秘笈
@@ -3407,9 +3416,12 @@ void BattleScene::calExpGot()
             }
             if (change)
             {
-                diff->setTwinRole(&r0, r);
-                diff->setText(fmt::format("修煉{}成功", item->Name));
-                diff->run();
+                if (result_ != 1)
+                {
+                    diff->setTwinRole(&r0, r);
+                    diff->setText(fmt::format("修煉{}成功", item->Name));
+                    diff->run();
+                }
             }
             if (item->MakeItem[0] >= 0 && r->ExpForMakeItem >= item->NeedExpForMakeItem && Event::getInstance()->haveItemBool(item->NeedMaterial))
             {
