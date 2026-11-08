@@ -3390,7 +3390,9 @@ void BattleScene::calExpGot()
         {
             diff->setTwinRole(&r0, r);
             diff->setText("升級");
+            kys_dbg("exp: diff begin");
             diff->run();
+            kys_dbg("exp: diff end");
         }
 
         //修炼秘笈

@@ -100,8 +100,15 @@ void ShowRoleDifference::draw()
         if (role2_->MagicID[i] > 0
             && (role1_->MagicID[i] <= 0 || role1_->getRoleShowLearnedMagicLevel(i) != role2_->getRoleShowLearnedMagicLevel(i)))
         {
+            auto magic = Save::getInstance()->getMagic(role2_->MagicID[i]);
+            if (magic == nullptr)
+            {
+                // mods can reference magic ids that are missing from their own data;
+                // dereferencing nullptr here crashed (Windows) / stalled (iOS)
+                continue;
+            }
             str = fmt::format("武學{}目前修為{}",
-                Save::getInstance()->getMagic(role2_->MagicID[i])->Name, role2_->getRoleShowLearnedMagicLevel(i));
+                magic->Name, role2_->getRoleShowLearnedMagicLevel(i));
             showOneDifference(role1_->MagicLevel[i], str, 20, color, x, y);
         }
     }
