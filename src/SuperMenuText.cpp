@@ -1,6 +1,7 @@
 ﻿#include "SuperMenuText.h"
 #include "../others/Hanz2Piny.h"
 #include "Font.h"
+#include "Engine.h"
 #include "PotConv.h"
 #include <algorithm>
 #include <cmath>
@@ -84,8 +85,11 @@ void SuperMenuText::setInputPosition(int x, int y)
 {
     InputBox::setInputPosition(x, y);
     selections_->setPosition(x, y + font_size_ * 3);
-    previous_->setPosition(x, y - font_size_ * 1.5);
-    next_->setPosition(x + font_size_ * 5, y - font_size_ * 1.5);
+    // 翻页键从顶部挪到屏幕右侧中部，单手也够得到
+    int ui_w = Engine::getInstance()->getUIWidth();
+    int ui_h = Engine::getInstance()->getUIHeight();
+    previous_->setPosition(ui_w - 170, ui_h / 2 - 60);
+    next_->setPosition(ui_w - 170, ui_h / 2 + 10);
 }
 
 void SuperMenuText::addDrawableOnCall(std::shared_ptr<DrawableOnCall> doc)

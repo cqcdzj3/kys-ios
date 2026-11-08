@@ -85,8 +85,12 @@ void VirtualStick::updateLayout()
 
     button_left_axis_->setPosition(static_cast<int>(w_ * 0.04), static_cast<int>(h_ * 0.5));
     button_right_axis_->setPosition(static_cast<int>(w_ * 0.82), static_cast<int>(h_ * 0.08));
-    button_view_->setPosition(static_cast<int>(w_ * 0.4 - 25), static_cast<int>(h_ * 0.9));
-    button_menu_->setPosition(static_cast<int>(w_ * 0.6 - 25), static_cast<int>(h_ * 0.9));
+    // 神秘代码/菜单键放到右手区（原 X/Y 的位置），横屏时更好按
+    int rx = static_cast<int>(w_ * 0.8);
+    int ry = static_cast<int>(h_ * 0.65);
+    int rr = static_cast<int>(h_ * 0.15);
+    button_view_->setPosition(rx - rr - static_cast<int>(h_ * 0.06), ry + static_cast<int>(h_ * 0.02));
+    button_menu_->setPosition(rx + static_cast<int>(h_ * 0.02), ry - rr - static_cast<int>(h_ * 0.04));
 
     auto t = TextureManager::getInstance()->getTexture("title", 320);
     left_axis_center_x_ = static_cast<int>(t->w / 2 + w_ * 0.04);
