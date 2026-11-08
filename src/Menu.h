@@ -41,6 +41,7 @@ public:
 
     MenuText(std::vector<std::string> items);
     void setStrings(std::vector<std::string> items);
+    void arrangeGrid(int rows, int col_w, int row_h);
     //void draw() override;
 
     std::vector<std::string> strings_;

@@ -152,9 +152,8 @@ Console::Console()
             }
         };
         std::shared_ptr<DrawableOnCall> doc = std::make_shared<DrawableOnCall>(drawScene);
-        auto smt = std::make_shared<SuperMenuText>("可輸入傳送地名，編號或拼音搜索：", 28, locs, 15);
+        auto smt = std::make_shared<SuperMenuText>("可輸入傳送地名，編號或拼音搜索：", 24, locs, 999);
         smt->setInputPosition(dx, dy);
-        smt->addDrawableOnCall(doc);
 
         smt->run();
         int id = smt->getResult();

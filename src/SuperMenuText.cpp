@@ -1,4 +1,4 @@
-﻿#include "SuperMenuText.h"
+#include "SuperMenuText.h"
 #include "../others/Hanz2Piny.h"
 #include "Font.h"
 #include "Engine.h"
@@ -123,6 +123,7 @@ void SuperMenuText::defaultPage()
     curPage_ = 0;
     updateMaxPages();
     selections_->setStrings(displays);
+    selections_->arrangeGrid(20, 240, font_size_ + 6);
     if (displays.size() != 0)
     {
         selections_->forceActiveChild(0);
@@ -145,6 +146,7 @@ void SuperMenuText::flipPage(int pInc)
             displays.push_back(items_[searchResultIndices_[i]].second);
         }
         selections_->setStrings(displays);
+        selections_->arrangeGrid(20, 240, font_size_ + 6);
     }
     // curDefault_ = false;
 }
@@ -195,6 +197,7 @@ void SuperMenuText::search(const std::string& text)
     updateMaxPages();
     curPage_ = 0;
     selections_->setStrings(results);
+    selections_->arrangeGrid(20, 240, font_size_ + 6);
     selections_->forceActiveChild(0);
     curDefault_ = false;
 }

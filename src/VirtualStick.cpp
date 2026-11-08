@@ -47,8 +47,8 @@ VirtualStick::VirtualStick()
     button_left_axis_->setVisible(false);
     button_right_axis_->setVisible(false);
 
-    addButton(button_view_, 310, w_ * 0.4 - 25, h_ * 0.9, GAMEPAD_BUTTON_BACK);
-    addButton(button_menu_, 308, w_ * 0.6 - 25, h_ * 0.9, GAMEPAD_BUTTON_START);
+    addButton(button_view_, 304, w_ * 0.4 - 25, h_ * 0.9, GAMEPAD_BUTTON_BACK);
+    addButton(button_menu_, 306, w_ * 0.6 - 25, h_ * 0.9, GAMEPAD_BUTTON_START);
     updateLayout();
 }
 

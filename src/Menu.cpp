@@ -308,3 +308,24 @@ int MenuText::getResultFromString(std::string str)
     }
     return -1;
 }
+
+
+void MenuText::arrangeGrid(int rows, int col_w, int row_h)
+{
+    if (rows < 1)
+    {
+        rows = 1;
+    }
+    int i = 0;
+    for (auto& c : childs_)
+    {
+        if (!c)
+        {
+            continue;
+        }
+        int col = i / rows;
+        int row = i % rows;
+        c->setPosition(x_ + col * col_w, y_ + row * row_h);
+        i++;
+    }
+}
