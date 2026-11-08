@@ -1,5 +1,6 @@
 ﻿#include "ShowExp.h"
 #include "Engine.h"
+#include "dbg_log.h"
 #include "fmt_compat.h"
 #include "Font.h"
 #include "TextureManager.h"
@@ -52,6 +53,14 @@ void ShowExp::onPressedOK()
 
 void ShowExp::draw()
 {
+    // 战败结算时这条界面可能收不到确认事件（输入状态错乱），超时自动关掉，
+    // 避免整局卡在这里
+    if (Engine::getInstance()->getTicks() - entered_ticks_ > 4000)
+    {
+        kys_dbg("exp: auto close");
+        exitWithResult(0);
+        return;
+    }
     Engine::getInstance()->fillColor({ 0, 0, 0, 128 }, 0, 0, -1, -1);
     Font::getInstance()->draw(text_, 30, Engine::getInstance()->getUIWidth() / 2 - 15 * Font::getTextDrawSize(text_)/2, y_, { 255, 255, 255, 255 });
     for (int i = 0; i < roles_.size(); i++)
