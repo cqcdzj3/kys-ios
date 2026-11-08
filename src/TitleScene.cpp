@@ -1,4 +1,5 @@
 ﻿#include "TitleScene.h"
+#include "dbg_log.h"
 #include "Audio.h"
 #include "BattleScene.h"
 #include "Button.h"
@@ -146,6 +147,7 @@ void TitleScene::dealEvent(EngineEvent& e)
         {
             //Save::getInstance()->getRole(0)->MagicLevel[0] = 900;    //测试用
             MainScene::getInstance()->run();
+            kys_dbg("title: back from loaded game");
         }
     }
     if (r == 2)

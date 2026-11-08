@@ -1,4 +1,5 @@
 ﻿#include "BattleScene.h"
+#include "dbg_log.h"
 #include "Audio.h"
 #include "fmt_compat.h"
 #include "BattleNetwork.h"    //必须在Audio之前

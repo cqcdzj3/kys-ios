@@ -1,6 +1,7 @@
 ﻿#include "Event.h"
 #include "Audio.h"
 #include "fmt_compat.h"
+#include "dbg_log.h"
 #include "BattleScene.h"
 #include "BattleSceneHades.h"
 #include "BattleSceneSekiro.h"
@@ -613,9 +614,11 @@ void Event::darkScene()
 
 void Event::dead()
 {
+    kys_dbg("dead: enter");
     menu2_->setText("勝敗乃兵家常事");
     RunNode::exitAll(1);
     forceExit();
+    kys_dbg("dead: exit");
 }
 
 //某人是否在队伍

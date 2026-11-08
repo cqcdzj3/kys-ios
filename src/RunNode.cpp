@@ -1,4 +1,5 @@
 ﻿#include "RunNode.h"
+#include "dbg_log.h"
 #include "McpServer.h"
 #include "fmt_compat.h"
 #include "Audio.h"
@@ -625,6 +626,7 @@ int RunNode::run(bool in_root /*= true*/)
         present();
     }
     running_ = false;
+    kys_dbg("run: loop ended exit=" + std::to_string(exit_) + " root=" + std::to_string(root_.size()));
     onExit();
     if (in_root)
     {
