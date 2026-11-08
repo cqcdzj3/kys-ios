@@ -539,6 +539,17 @@ void UIItem::showItemProperty(Item* item)
     {
         auto str = fmt::format("習得武學{}", magic->Name);
         addOneProperty(str, 1);
+        //秘笈：顯示 1~10 級的威力（傷害）
+        std::string damage;
+        for (int lv = 0; lv < 10; lv++)
+        {
+            if (lv)
+            {
+                damage += " ";
+            }
+            damage += fmt::format("{}", magic->Attack[lv]);
+        }
+        addOneProperty(fmt::format("威力1~10級 {}", damage));
     }
     l = showAddedProperty(size, c, x, y);
     bottom_y = (std::max)(bottom_y, y + l * size);

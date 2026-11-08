@@ -69,6 +69,7 @@ public:
     static void notifyWindowResized();
 
     static void addIntoDrawTop(std::shared_ptr<RunNode> element) { root_.push_back(element); }
+    static void clearRoot() { root_.clear(); }    // 丢弃残留的场景栈
 
     static std::shared_ptr<RunNode> removeFromDraw(std::shared_ptr<RunNode> element);
 

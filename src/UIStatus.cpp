@@ -253,6 +253,18 @@ void UIStatus::draw()
             font->draw(str, font_size, x1, y1, color_ability1);
             str = fmt::format("{:3}", role_->getRoleShowLearnedMagicLevel(i));
             font->draw(str, font_size, x1 + 100, y1, role_->getRoleShowLearnedMagicLevel(i) > 9 ? color_red : color_purple);
+            //當前等級的威力（傷害）
+            int lv_index = role_->getRoleShowLearnedMagicLevel(i) - 1;
+            if (lv_index < 0)
+            {
+                lv_index = 0;
+            }
+            if (lv_index > 9)
+            {
+                lv_index = 9;
+            }
+            str = fmt::format("威{}", magic->Attack[lv_index]);
+            font->draw(str, font_size, x1 + 138, y1, color_ability1);
         }
         else
         {

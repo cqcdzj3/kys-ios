@@ -67,8 +67,20 @@ int Application::run()
     config();
 
     RunNode::addIntoDrawTop(DayNightSystem::getInstance());
-    auto s = std::make_shared<TitleScene>();    //开始界面
-    s->run();
+
+    // 标题场景可能因为残留的场景栈被意外结束（例如战败后 exitAll 误伤），
+    // 这里循环重建，保证任何情况下都能回到标题而不是黑屏卡死
+    while (true)
+    {
+        RunNode::clearRoot();
+        auto t0 = Engine::getInstance()->getTicks();
+        auto s = std::make_shared<TitleScene>();
+        s->run();
+        if (Engine::getInstance()->getTicks() - t0 < 200)
+        {
+            SDL_Delay(200);    // 避免异常情况下空转
+        }
+    }
 
     return 0;
 }
