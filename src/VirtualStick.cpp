@@ -1,4 +1,5 @@
 ﻿#include "VirtualStick.h"
+#include "Font.h"
 #include "Button.h"
 #include "GameUtil.h"
 #include "Menu.h"
@@ -47,8 +48,8 @@ VirtualStick::VirtualStick()
     button_left_axis_->setVisible(false);
     button_right_axis_->setVisible(false);
 
-    addButton(button_view_, 304, w_ * 0.4 - 25, h_ * 0.9, GAMEPAD_BUTTON_BACK);
-    addButton(button_menu_, 306, w_ * 0.6 - 25, h_ * 0.9, GAMEPAD_BUTTON_START);
+    addButton(button_view_, 312, w_ * 0.4 - 25, h_ * 0.9, GAMEPAD_BUTTON_BACK);
+    addButton(button_menu_, 312, w_ * 0.6 - 25, h_ * 0.9, GAMEPAD_BUTTON_START);
     updateLayout();
 }
 
@@ -85,12 +86,12 @@ void VirtualStick::updateLayout()
 
     button_left_axis_->setPosition(static_cast<int>(w_ * 0.04), static_cast<int>(h_ * 0.5));
     button_right_axis_->setPosition(static_cast<int>(w_ * 0.82), static_cast<int>(h_ * 0.08));
-    // 神秘代码/菜单键放到右手区（原 X/Y 的位置），横屏时更好按
+    // 和 A/B 组成对称的四键布局：左=传送，上=选单
     int rx = static_cast<int>(w_ * 0.8);
     int ry = static_cast<int>(h_ * 0.65);
     int rr = static_cast<int>(h_ * 0.15);
-    button_view_->setPosition(rx - rr - static_cast<int>(h_ * 0.06), ry + static_cast<int>(h_ * 0.02));
-    button_menu_->setPosition(rx + static_cast<int>(h_ * 0.02), ry - rr - static_cast<int>(h_ * 0.04));
+    button_view_->setPosition(rx - rr, ry);
+    button_menu_->setPosition(rx, ry - rr);
 
     auto t = TextureManager::getInstance()->getTexture("title", 320);
     left_axis_center_x_ = static_cast<int>(t->w / 2 + w_ * 0.04);
@@ -333,6 +334,16 @@ void VirtualStick::draw()
     };
     draw_axis(left_axis_x_, left_axis_y_);
     draw_axis(right_axis_x_, right_axis_y_);
+
+    // 空白圆形贴图上写功能名（原 X/Y 位置）
+    {
+        int rx = static_cast<int>(w_ * 0.8);
+        int ry = static_cast<int>(h_ * 0.65);
+        int rr = static_cast<int>(h_ * 0.15);
+        auto font = Font::getInstance();
+        font->draw("傳", 46, rx - rr + 30, ry + 30, { 60, 60, 60, 255 });
+        font->draw("選", 46, rx + 30, ry - rr + 30, { 60, 60, 60, 255 });
+    }
 }
 
 void VirtualStick::setStyle(int style)

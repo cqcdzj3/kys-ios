@@ -24,20 +24,8 @@
 
 Console::Console()
 {
-    std::string code;
-    {
-        auto input = std::make_shared<InputBox>("神秘代碼：", 30);
-        input->setInputPosition(350, 300);
-        input->run();
-        if (input->getResult() >= 0)
-        {
-            code = input->getText();
-        }
-        else
-        {
-            return;
-        }
-    }
+    // 直接打開傳送清單，省掉一次確認
+    std::string code = "chuansong";
     // 捂脸
     auto splits = strfunc::splitString(code, " ");
     if (splits.empty())
