@@ -550,6 +550,24 @@ void UIItem::showItemProperty(Item* item)
             damage += fmt::format("{}", magic->Attack[lv]);
         }
         addOneProperty(fmt::format("威力1~10級 {}", damage));
+        std::string need_mp;
+        for (int lv = 0; lv < 10; lv++)
+        {
+            if (lv)
+            {
+                need_mp += " ";
+            }
+            need_mp += fmt::format("{}", magic->calNeedMP(lv));
+        }
+        addOneProperty(fmt::format("內力1~10級 {}", need_mp));
+        static const char* area_names[] = { "點", "線", "十字", "面" };
+        int area = magic->AttackAreaType;
+        if (area < 0 || area > 3)
+        {
+            area = 0;
+        }
+        addOneProperty(fmt::format("攻擊範圍 {} 射程{} 半徑{}",
+            area_names[area], magic->SelectDistance[9], magic->AttackDistance[9]));
     }
     l = showAddedProperty(size, c, x, y);
     bottom_y = (std::max)(bottom_y, y + l * size);

@@ -223,6 +223,24 @@ void UIStatus::draw()
         font->draw(fmt::format("{:5}", role_->IncLife), font_size, x + 644, y + 25, color_white);
     }
 
+    // 武學常識 / 道德 / 聲望 / 帶毒
+    font->draw("常識", font_size, x, y + 50, color_ability1);
+    font->draw(fmt::format("{:5}", role_->Knowledge), font_size, x + 44, y + 50, color_white);
+    font->draw("道德", font_size, x + 200, y + 50, color_ability1);
+    font->draw(fmt::format("{:5}", role_->Morality), font_size, x + 244, y + 50, color_white);
+    font->draw("聲望", font_size, x + 400, y + 50, color_ability1);
+    font->draw(fmt::format("{:5}", role_->Fame), font_size, x + 444, y + 50, color_white);
+    font->draw("帶毒", font_size, x + 600, y + 50, color_ability1);
+    font->draw(fmt::format("{:5}", role_->AttackWithPoison), font_size, x + 644, y + 50, color_white);
+
+    // 中毒 / 受傷 / 雙擊（放在體力那一行的右側空白處）
+    font->draw("中毒", font_size, x + 380, y + 100, color_ability1);
+    font->draw(fmt::format("{:5}", role_->Poison), font_size, x + 424, y + 100, role_->Poison > 0 ? color_red : color_white);
+    font->draw("受傷", font_size, x + 480, y + 100, color_ability1);
+    font->draw(fmt::format("{:5}", role_->Hurt), font_size, x + 524, y + 100, role_->Hurt > 0 ? color_red : color_white);
+    font->draw("雙擊", font_size, x + 580, y + 100, color_ability1);
+    font->draw(role_->AttackTwice > 0 ? "有" : "無", font_size, x + 624, y + 100, color_white);
+
     x = x_ + 20;
     y = y_ + 270;
     font->draw("技能", 25, x - 10, y, color_name);
@@ -264,7 +282,9 @@ void UIStatus::draw()
                 lv_index = 9;
             }
             str = fmt::format("威{}", magic->Attack[lv_index]);
-            font->draw(str, font_size, x1 + 138, y1, color_ability1);
+            font->draw(str, font_size, x1 + 132, y1, color_ability1);
+            str = fmt::format("內{}", magic->calNeedMP(lv_index));
+            font->draw(str, 18, x1 + 178, y1 + 2, color_ability1);
         }
         else
         {
