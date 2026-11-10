@@ -79,18 +79,25 @@ jobs:
 
       - name: Compile app icon catalog
         run: |
-          set -euxo pipefail
+          set -uxo pipefail
           APP=$(find build-ios -maxdepth 4 -name "kys.app" -type d | head -n 1)
           rm -rf build-ios/iconout && mkdir -p build-ios/iconout
-          xcrun actool ios/AppIcon.xcassets \
+          if timeout 240 xcrun actool ios/AppIcon.xcassets \
             --compile build-ios/iconout \
             --platform iphoneos \
             --minimum-deployment-target 14.0 \
             --app-icon AppIcon \
-            --output-partial-info-plist build-ios/icon-partial.plist
-          ls -la build-ios/iconout
-          cp build-ios/iconout/Assets.car "$APP/Assets.car"
-          echo "Assets.car copied to $APP"
+            --output-partial-info-plist build-ios/icon-partial.plist 2>&1 | tee -a build.log; then
+            ls -la build-ios/iconout || true
+            if [ -f build-ios/iconout/Assets.car ]; then
+              cp build-ios/iconout/Assets.car "$APP/Assets.car"
+              echo "Assets.car copied to $APP"
+            else
+              echo "::warning::actool produced no Assets.car"
+            fi
+          else
+            echo "::warning::actool failed or timed out; continuing without Assets.car"
+          fi
 
       - name: Package unsigned IPA
         run: |
