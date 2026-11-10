@@ -109,6 +109,24 @@ jobs:
             echo "::warning::actool failed or timed out; continuing without Assets.car"
           fi
 
+      - name: Publish log early
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -uxo pipefail
+          upload() {
+            "$@" & local pid=$!
+            ( sleep 90; kill -9 "$pid" 2>/dev/null ) & local wd=$!
+            wait "$pid"; local st=$?
+            kill "$wd" 2>/dev/null || true
+            return $st
+          }
+          gh release view ci-latest >/dev/null 2>&1 || upload gh release create ci-latest --title "CI latest" --notes "auto" || true
+          [ -f build.log ] && upload gh release upload ci-latest build.log --clobber || true
+          echo "early publish done"
+
       - name: Package unsigned IPA
         run: |
           set -euxo pipefail
