@@ -82,27 +82,18 @@ jobs:
 
       - name: Compile app icon catalog
         run: |
-          set -uxo pipefail
-          echo "MARK $(date -u +%H:%M:%S) actool" | tee -a build.log
+          set -euxo pipefail
           APP=$(find build-ios -maxdepth 4 -name "kys.app" -type d | head -n 1)
           rm -rf build-ios/iconout && mkdir -p build-ios/iconout
-          rm -f build-ios/actool.log
-          ( xcrun actool ios/AppIcon.xcassets \
+          xcrun actool ios/AppIcon.xcassets \
             --compile build-ios/iconout \
             --platform iphoneos \
             --minimum-deployment-target 14.0 \
             --app-icon AppIcon \
-            --output-partial-info-plist build-ios/icon-partial.plist > build-ios/actool.log 2>&1 ) & ACTOOL_PID=$!
-          ( sleep 240; kill -9 $ACTOOL_PID 2>/dev/null ) & WATCHDOG_PID=$!
-          wait $ACTOOL_PID; ACTOOL_STATUS=$?
-          kill $WATCHDOG_PID 2>/dev/null || true
-          tail -n 40 build-ios/actool.log | tee -a build.log || true
-          if [ "$ACTOOL_STATUS" -eq 0 ] && [ -f build-ios/iconout/Assets.car ]; then
-            cp build-ios/iconout/Assets.car "$APP/Assets.car"
-            echo "Assets.car copied to $APP"
-          else
-            echo "::warning::actool failed; continuing without Assets.car"
-          fi
+            --output-partial-info-plist build-ios/icon-partial.plist
+          ls -la build-ios/iconout
+          cp build-ios/iconout/Assets.car "$APP/Assets.car"
+          echo "Assets.car copied to $APP"
 
       - name: Publish log early
         if: always()
@@ -111,15 +102,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -uxo pipefail
-          upload() {
-            "$@" & local pid=$!
-            ( sleep 90; kill -9 "$pid" 2>/dev/null ) & local wd=$!
-            wait "$pid"; local st=$?
-            kill "$wd" 2>/dev/null || true
-            return $st
-          }
-          gh release view ci-latest >/dev/null 2>&1 || upload gh release create ci-latest --title "CI latest" --notes "auto" || true
-          [ -f build.log ] && upload gh release upload ci-latest build.log --clobber || true
+          gh release view ci-latest >/dev/null 2>&1 || gh release create ci-latest --title "CI latest" --notes "auto" || true
+          [ -f build.log ] && gh release upload ci-latest build.log --clobber || true
           echo "early publish done"
 
       - name: Package unsigned IPA
