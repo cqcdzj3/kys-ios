@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-latest
     timeout-minutes: 120
 
     steps:
@@ -79,6 +79,30 @@ jobs:
           echo "===== artifacts on disk ====="
           find build-ios -maxdepth 4 -name "kys*" | head -20 || true
           find build-ios -name "*.app" -maxdepth 4 | head -5 || true
+
+      - name: Compile app icon catalog
+        run: |
+          set -uxo pipefail
+          echo "MARK $(date -u +%H:%M:%S) actool" | tee -a build.log
+          APP=$(find build-ios -maxdepth 4 -name "kys.app" -type d | head -n 1)
+          rm -rf build-ios/iconout && mkdir -p build-ios/iconout
+          rm -f build-ios/actool.log
+          ( xcrun actool ios/AppIcon.xcassets \
+            --compile build-ios/iconout \
+            --platform iphoneos \
+            --minimum-deployment-target 14.0 \
+            --app-icon AppIcon \
+            --output-partial-info-plist build-ios/icon-partial.plist > build-ios/actool.log 2>&1 ) & ACTOOL_PID=$!
+          ( sleep 240; kill -9 $ACTOOL_PID 2>/dev/null ) & WATCHDOG_PID=$!
+          wait $ACTOOL_PID; ACTOOL_STATUS=$?
+          kill $WATCHDOG_PID 2>/dev/null || true
+          tail -n 40 build-ios/actool.log | tee -a build.log || true
+          if [ "$ACTOOL_STATUS" -eq 0 ] && [ -f build-ios/iconout/Assets.car ]; then
+            cp build-ios/iconout/Assets.car "$APP/Assets.car"
+            echo "Assets.car copied to $APP"
+          else
+            echo "::warning::actool failed; continuing without Assets.car"
+          fi
 
       - name: Publish log early
         if: always()
