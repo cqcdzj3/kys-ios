@@ -1,4 +1,4 @@
-﻿name: Build unsigned iOS IPA
+name: Build unsigned iOS IPA
 
 on:
   workflow_dispatch:
@@ -44,6 +44,7 @@ jobs:
           VCPKG_OSX_DEPLOYMENT_TARGET: "14.0"
         run: |
           set -euxo pipefail
+          echo "MARK $(date -u +%H:%M:%S) vcpkg install" | tee -a build.log
           "$VCPKG_ROOT/vcpkg" install \
             sdl3 sdl3-ttf "sdl3-image[core,png]" "sdl3-mixer[core]" \
             sqlite3 yaml-cpp glaze asio picosha2 libiconv fmt \
@@ -55,6 +56,7 @@ jobs:
       - name: Configure
         run: |
           set -euxo pipefail
+          echo "MARK $(date -u +%H:%M:%S) configure" | tee -a build.log
           cmake -S src -B build-ios \
             -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
             -DVCPKG_TARGET_TRIPLET=arm64-ios \
@@ -66,6 +68,7 @@ jobs:
       - name: Build
         run: |
           set -euxo pipefail
+          echo "MARK $(date -u +%H:%M:%S) build" | tee -a build.log
           cmake --build build-ios --config Release -j 4 2>&1 | tee -a build.log
 
       - name: Show build log tail
@@ -80,14 +83,21 @@ jobs:
       - name: Compile app icon catalog
         run: |
           set -uxo pipefail
+          echo "MARK $(date -u +%H:%M:%S) actool" | tee -a build.log
           APP=$(find build-ios -maxdepth 4 -name "kys.app" -type d | head -n 1)
           rm -rf build-ios/iconout && mkdir -p build-ios/iconout
-          if timeout 240 xcrun actool ios/AppIcon.xcassets \
+          rm -f build-ios/actool.log
+          ( xcrun actool ios/AppIcon.xcassets \
             --compile build-ios/iconout \
             --platform iphoneos \
             --minimum-deployment-target 14.0 \
             --app-icon AppIcon \
-            --output-partial-info-plist build-ios/icon-partial.plist 2>&1 | tee -a build.log; then
+            --output-partial-info-plist build-ios/icon-partial.plist > build-ios/actool.log 2>&1 ) & ACTOOL_PID=$!
+          ( sleep 150; kill -9 $ACTOOL_PID 2>/dev/null ) & WATCHDOG_PID=$!
+          wait $ACTOOL_PID; ACTOOL_STATUS=$?
+          kill $WATCHDOG_PID 2>/dev/null || true
+          cat build-ios/actool.log | tail -n 40 | tee -a build.log || true
+          if [ "$ACTOOL_STATUS" -eq 0 ]; then
             ls -la build-ios/iconout || true
             if [ -f build-ios/iconout/Assets.car ]; then
               cp build-ios/iconout/Assets.car "$APP/Assets.car"
@@ -102,6 +112,7 @@ jobs:
       - name: Package unsigned IPA
         run: |
           set -euxo pipefail
+          echo "MARK $(date -u +%H:%M:%S) package" | tee -a build.log
           APP=$(find build-ios -maxdepth 4 -name "kys.app" -type d | head -n 1)
           echo "APP=$APP"
           if [ -z "$APP" ]; then echo "::error::kys.app not found"; exit 1; fi
