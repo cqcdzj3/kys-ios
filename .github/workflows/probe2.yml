@@ -1,11 +1,15 @@
 ﻿name: probe2
 on: push
 jobs:
-  linux:
-    runs-on: ubuntu-latest
+  mac13:
+    runs-on: macos-13
     steps:
-      - run: echo linux ok
-  mac:
-    runs-on: macos-latest
+      - run: sw_vers
+  mac14:
+    runs-on: macos-14
     steps:
-      - run: echo mac ok
+      - run: sw_vers
+  mac15:
+    runs-on: macos-15
+    steps:
+      - run: sw_vers
