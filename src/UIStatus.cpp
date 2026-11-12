@@ -233,13 +233,13 @@ void UIStatus::draw()
     font->draw("帶毒", font_size, x + 600, y + 50, color_ability1);
     font->draw(fmt::format("{:5}", role_->AttackWithPoison), font_size, x + 644, y + 50, color_white);
 
-    // 中毒 / 受傷 / 雙擊（放在體力那一行的右側空白處）
-    font->draw("中毒", font_size, x + 380, y + 100, color_ability1);
-    font->draw(fmt::format("{:5}", role_->Poison), font_size, x + 424, y + 100, role_->Poison > 0 ? color_red : color_white);
-    font->draw("受傷", font_size, x + 480, y + 100, color_ability1);
-    font->draw(fmt::format("{:5}", role_->Hurt), font_size, x + 524, y + 100, role_->Hurt > 0 ? color_red : color_white);
-    font->draw("雙擊", font_size, x + 580, y + 100, color_ability1);
-    font->draw(role_->AttackTwice > 0 ? "有" : "無", font_size, x + 624, y + 100, color_white);
+    // 中毒 / 受傷 / 雙擊：放在輕功右側的空白列（x+505 起，避開武學列表）
+    font->draw("中毒", font_size, x + 505, y, color_ability1);
+    font->draw(fmt::format("{:4}", role_->Poison), font_size, x + 549, y, role_->Poison > 0 ? color_red : color_white);
+    font->draw("受傷", font_size, x + 505, y + 25, color_ability1);
+    font->draw(fmt::format("{:4}", role_->Hurt), font_size, x + 549, y + 25, role_->Hurt > 0 ? color_red : color_white);
+    font->draw("雙擊", font_size, x + 505, y + 50, color_ability1);
+    font->draw(role_->AttackTwice > 0 ? "有" : "無", font_size, x + 549, y + 50, color_white);
 
     x = x_ + 20;
     y = y_ + 270;
